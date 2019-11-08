@@ -1,0 +1,143 @@
+#form1 {
+    width:100%;
+    height:100%;
+}
+
+#upload{
+	width: 20%;
+}
+
+#safenotsafe{
+	display: block;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.gradiente {
+    text-align: center;
+    padding-bottom: 5px;
+    background: /* gradient can be an image */
+    linear-gradient( 90deg, #ffd400, #ff4701 ) left bottom #777 no-repeat;
+    background-size: 100% 5px
+}
+
+#bbar{
+	height: 40px;
+}
+
+#maindiv{
+	font-size: 18px;
+	padding-top: 42px;
+	text-align: -webkit-center;
+	margin-bottom: 20px;
+}
+
+#options{
+	text-align: -webkit-center;
+}
+
+#options .spimg{
+	margin: auto;
+}
+
+#comentario {
+	margin-top: 1%;
+	width: 90%;
+	height: 70px;
+	font-size: medium;
+	font-family: monospace;
+	border-color: lightgray;
+}
+/*#upload, #capturecam{
+	display: block;
+}*/
+
+#uploaddiv{
+	display: none;
+}
+
+#frame {
+	display: none;
+	width: 300px;
+	height: 300px;
+	margin-top: 10px;
+}
+
+#camera {
+	margin-top: 10px;
+	display: block;
+}
+
+#capturecamdiv{
+	display: none;
+}
+
+#video, #capture, #snapshot{
+	display: block;
+}
+
+#capture img{
+	width: 30px;
+	height: 30px;
+}
+
+#changephoto img{
+	width: 30px;
+	height: 30px;
+}
+
+#imagenesdiv{
+	display: none;
+}
+
+#saveme {
+	display: block;
+	margin-top: 10px;
+	background-color: #5B9BD5;
+    margin-bottom: 5px;
+    border: none;
+}
+
+#usrid{
+	display: none;
+}
+
+#selsitio{
+	width: 90%;
+}
+
+#changephoto{
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.smallimage{
+	width: 40px;
+	margin: 20px;
+}
+
+/* HIDE RADIO */
+[type=radio] { 
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* IMAGE STYLES */
+[type=radio] + img {
+  cursor: pointer;
+}
+
+/* CHECKED STYLES */
+[type=radio]:checked + img {
+  outline: 2px solid  #5B9BD5;
+  background: lightgray;
+}
+
+/*@media (max-width: 767px) {
+	#capturecam{
+		display: none !important;
+	}
+}
+*/
