@@ -13,6 +13,7 @@ hamburger.addEventListener('click', () =>{
 	hidemenu();
 });
 
+
 function hidemenu(){
 	navlinks.classList.toggle("open");
 	links.forEach(link =>{
