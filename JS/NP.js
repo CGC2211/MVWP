@@ -414,7 +414,7 @@ function fillprevinfo(tipo , id, sexo,edad,estatura){
 											<li data-value="${object.Umbral}" class="row${index}" >Umbral ${object.Umbral}</li>
 											<li data-value="${object.RMBench}" class="row${index}" >1 RM Bench ${object.RMBench}</li>
 											<li data-value="${object.RMSquat}" class="row${index}" >1 RM Squat ${object.RMSquat}</li>
-											<li><input class="depgraf" data-index="${index}" type="button" value="Graficar"/></li>
+											<li><input class="depgraf" data-fecha="${object.FechaConsulta}" data-id="${object.IDP}" data-index="${index}" type="button" value="Graficar"/></li>
 										</ul>
 										
 									</li>
@@ -435,72 +435,27 @@ $('body').on('click', 'li.rdeport', function() {
 });
 
 $('body').on('click', 'input.depgraf', function() { 
-   resultados($(this).attr('data-index'));
+   resultados($(this).attr('data-id'),$(this).attr('data-fecha'));
 	console.log($(this).parent().parent());
    $(this).parent().parent().parent().find('ul').slideToggle();
 });
 
-function resultados(data){
-	let clase = "row"+data;
+function resultados(id,fecha){
 	let datos = [];
-	
-	
-
-	$('li.'+clase).each(function(index){
-		datos.push($(this).attr("data-value"));
+	datos.push(id);
+	datos.push(fecha);
+	$.ajax({
+		type:"POST",
+		url:'Consult.php',
+		data:({ "callresultsdep": datos}),
+		dataType:"json",
+			success: function(data){
+				console.log(data);
+				
+			},error: function(err){
+				console.log(err);
+			  }
 	});
-	console.log(datos);
-	/*
-	$('#rdep').css('display' ,'flex');
-	//$('#rdep').style.display = "flex";
-	$('.cuerpo-resultados').empty();
-	$('.cuerpo-resultados').append(
-		`<div>
-		<ul>
-				<li><span class="lblo" >Densidad:					</span></li>
-				<li><span class="lblo" >Brozeck % Grasa:</span></li>
-				<li><span class="lblo" >Siri % Grasa:</span></li>
-				<li><span class="lblo" >Masa Ósea:</span></li>
-				<li><span class="lblo" >Masa Residual en hombres:</span></li>
-				<li><span class="lblo" >Masa Residual en mujer:</span></li>
-				<li><span class="lblo" >Rose MM (kg):</span></li>
-				<li><span class="lblo" >Rose MM%:</span></li>
-				<li><span class="lblo" >MLG Kg:</span></li>
-				<li><span class="lblr" >${densidad}</span></li>
-				<li><span class="lblr">${brozec}</span></li>
-				<li><span class="lblr">${siri}</span></li>
-				<li><span class="lblr">${masao}</span></li>
-				<li><span class="lblr">${masarh}</span></li>
-				<li><span class="lblr">${masarm}</span></li>
-				<li><span class="lblr">${brozeck}</span></li>
-				<li><span class="lblr">${sirik}</span></li>
-				<li><span class="lblr">${rosemm}</span></li>
-					
-		</ul>
-	</div>
-	
-	<div>
-		<ul>
-				<li><span class="lblo">Brozeck KG:</span></li>
-				<li><span class="lblo">Siri KG:</span></li>
-				<li><span class="lblo">D. whiteres:</span></li>
-				<li><span class="lblo">Brozeck % Grasa:</span></li>
-				<li><span class="lblo">Siri % Grasa:</span></li>
-				<li><span class="lblo">D.Whiters M:</span></li>
-				<li><span class="lblo">Brozeck % Grasa M:</span></li>
-				<li><span class="lblo">Siri % Grasa M:</span></li>
-				<li><span class="lblr">${rosep}</span></li>
-				<li><span class="lblr">${mlg}</span></li>
-				<li><span class="lblr">${dwhi}</span></li>
-				<li><span class="lblr">${sirig}</span></li>
-				<li><span class="lblr">${brozecg}</span></li>
-				<li><span class="lblr">${dwhim}</span></li>
-				<li><span class="lblr">${brozecgm}</span></li>
-				<li><span class="lblr">${sirigm}</span></li>
-		</ul>
-	</div>`
-	);
-		*/
 }
 
 
