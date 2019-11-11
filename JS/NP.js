@@ -1,5 +1,6 @@
 let flex = document.getElementById('flex');
 let modal = document.getElementById('myModal');
+let modals = document.getElementById('ModalSeguimiento');
 const hamburger = document.querySelector('.hamburger');
 const navlinks = document.querySelector('.nav-links');
 const links = document.querySelectorAll('.nav-links li');
@@ -106,9 +107,12 @@ function validate(){
 					$(this).val() == '0' || $(this).val() == '' ? $(this).addClass('errorclass') : $(this).removeClass('errorclass');
 				});
 				
-		}			
+		}
+		
+		
 	}
 }	
+
 
 function insertnormal(id){
 	$.ajax({
@@ -316,7 +320,7 @@ function apendresults(data){
 		   <td scope="row">${object.Name}</td>
 		   <td>${object.EDAD}</td>
 		   <th><a class="consultas" data-id="${object.ID}" data-Tipo=${object.TIPO} data-talla="${object.ESTATURA}" data-Edad="${object.EDAD}" data-sexo="${object.SEXO}" ><span class="fa fa-search"></span></a></th>
-		   <th><a class="nseguimiento" data-id="${object.ID}"> <span class="addcon fa fa-list"  ></span></a></th>
+		   <th><a class="nseguimiento" data-talla="${object.ESTATURA}" data-Edad="${object.EDAD}" data-sexo="${object.SEXO}" data-Tipo=${object.TIPO} data-id="${object.ID}"> <span class="addcon fa fa-list"></span></a></th>
 		   </tr>
 		   `
 		   );
@@ -334,11 +338,49 @@ $(document).on('click', '.consultas', function () {
 
 });
 
+$(document).on('click','.nseguimiento', function(){
+	var paciente =$(this).attr('data-Tipo');
+  		switch(paciente){
+  			case "Normal":
+  				$(".normals").css("display","flex");
+  				//$(".normal").css("width",width + 11);
+
+  				$(".Deportistas").css("display","none");
+  			break;
+  			case "Deportista":
+  				$(".normals").css("display","none");
+				$(".Deportistas").css("display","flex");
+  			break;
+  			default:
+  				$(".normals").hide();
+  				$(".Deportistas").hide();
+  			break;
+		  }
+		  
+	$('#TIPOP').html($(this).attr('data-Tipo'));
+	$('#IDPC').html($(this).attr('data-id'));
+	$('#EDADP').html($(this).attr('data-Edad'));
+	$('#SEXOP').html($(this).attr('data-sexo'));
+	$('#ESTATURAP').html($(this).attr('data-talla'));	  
+	modals.style.display = 'flex';
+});
+
 $('.close').click(function(){
 	$("#tableseguimientonormal").empty();
 	$(".archive_month").empty();
 	modal.style.display = 'none';
 
+});
+
+$('#close').click(function(){
+	modals.style.display = 'none';
+	$('.element-normals input').each(function(index){
+		$(this).val('') ;
+	});
+
+	$('.element-deportistas input').each(function(index){
+		$(this).val('');
+	});
 });
 
 
@@ -457,6 +499,204 @@ function resultados(id,fecha){
 			  }
 	});
 }
+
+$('body').on('click', 'input.segbtn', function() {
+	 validates();
+		if ($('.errorclass').length == 0){
+			insertseguimiento($('#TIPOP').html());
+			modals.style.display = 'none';
+			$('.element-normals input').each(function(index){
+				$(this).val('') ;
+			});
+
+			$('.element-deportistas input').each(function(index){
+				$(this).val('');
+			});
+		}
+	});
+
+
+function validates(){
+	var tipo = $('#TIPOP').html(); 
+	switch(tipo){
+		case 'Normal':
+				$('.element-normals input').each(function(index){
+					$(this).val() == '0' || $(this).val() == '' ? $(this).addClass('errorclass') : $(this).removeClass('errorclass');
+				});
+		break;
+		case 'Deportista':
+			$('.element-deportistas input').each(function(index){
+				$(this).val() == '0' || $(this).val() == '' ? $(this).addClass('errorclass') : $(this).removeClass('errorclass');
+			});
+			
+	}
+
+}
+
+function insertseguimiento(tipo){
+	let datos = [];
+	switch(tipo){
+		case "Normal":
+				$('.element-normals input').each(function(index){
+					datos.push($(this).val());
+				});
+				$.ajax({
+					type:"POST",
+					url:'NormalData.php',
+					data:({ID: $('#IDPC').html(),
+							Peso: datos[0] ,
+							CirCin: datos[1],
+							CirCad: datos[2],
+							PlieBic: datos[3],
+							PliTri: datos[4],
+							PorGra: datos[5] 
+						}),
+						success: function(data){
+							alert("Paciente guardado con Exito");
+						},error: function(err){
+							alert(err);
+						  }
+				});
+		break;
+		case 'Deportista':
+			$('.element-deportistas input').each(function(index){
+				datos.push($(this).val());
+			});
+			
+			$.ajax({
+				type:"POST",
+				url:'DeportData.php',
+				data:({ID: $('#IDPC').html(),
+						Peso: datos[0],
+						Bicep: datos[1],
+						Tricep: datos[2],
+						Sub: datos[3],
+						Cresta: datos[4],
+						Supra: datos[5],
+						Abdom: datos[6],
+						Muslo: datos[7],
+						Panto: datos[8],
+						BicepR: datos[9],
+						BicepF: datos[10],
+						CinMin: datos[11],
+						Cad: datos[12],
+						Pant: datos[13],
+						Hum: datos[14],
+						Femur: datos[15],
+						VO2: datos[16],
+						Umbral: datos[17],
+						RMB: datos[18],
+						RMS: datos[19],
+					}),
+					success: function(data){
+						
+						let c = 0;
+						let m = 0;
+						let densidad = 0;
+						let edad = parseInt($('#EDADP').html(),10);
+						let sexo = $('#SEXOP').html();
+						let estatura = parseInt($('#ESTATURAP').html(),10);
+						switch(sexo){
+							case "Masculino":
+								switch(true){
+									case  (edad >= 17 && edad <= 19 ):
+										c = 1.162;
+										m = 0.063;
+									break;
+									case (edad >= 20 && edad <= 29):
+										c = 1.1631;
+										m = 0.0632;
+									break;
+									case (edad >= 30 && edad <= 39):
+										c = 1.142;
+										m = 0.0544;
+									break;
+									case (edad >= 40 && edad <= 49):
+										c = 1.162;
+										m = 0.07;
+									break;
+									case (edad >= 50):
+										c = 1.1715;
+										m = 0.0779;
+									break;
+								}
+							break;
+						}
+						let brozec = 0;
+						let siri = 0;
+						let masao = 0;
+						let masarh = 0;
+						let masarm = 0;
+						let rosemm = 0;
+						let rosep = 0;
+						let mlg = 0;
+						let brozeck = 0;
+						let sirik = 0;
+						let dwhi = 0;
+						let dwhim = 0;
+						let brozecg = 0;
+						let brozecgm = 0;
+						let sirig = 0;
+						let sirigm = 0;
+
+						densidad	= c-(m * (Math.log10(parseFloat(datos[2]) + parseFloat(datos[3]) + parseFloat(datos[1]) + parseFloat(datos[4]) )));
+						brozec  	= ((4.57/densidad)-4.142)*100;
+						siri 		= ((4.95/densidad)-4.5)*100;
+						masao  		= (3.02*( ( (estatura/100)**2 )*(parseFloat(datos[14])/100)*(parseFloat(datos[15])/100)*400)**0.712);
+						masarh 		= parseFloat(datos[0])*0.241;
+						masarm 		= parseFloat(datos[0])*0.209;
+						brozeck 	= parseFloat(datos[0])*(brozec/100);
+						sirik 		= parseFloat(datos[0]) * (siri/100);
+						rosemm 		= parseFloat(datos[0])-(sirik+masao+masarh);
+						rosep 		= (rosemm*100)/58;
+						mlg 		= parseFloat(datos[0]) - brozeck;
+						dwhi 		= 1.0988-(0.0004*( parseFloat(datos[2]) + parseFloat(datos[3]) +parseFloat(datos[1]) + parseFloat(datos[5]) + parseFloat(datos[6]) + parseFloat(datos[7]) + parseFloat(datos[8]) ));
+						sirig 		= ((4.95/dwhi)-4.5)*100;
+						brozecg 	= ((4.57/dwhi)-4.142)*100;
+						dwhim 		= 1.20953-0.08294*( Math.log10((parseFloat(datos[2])+parseFloat(datos[3])+parseFloat(datos[1])+parseFloat(datos[5])+parseFloat(datos[6])+parseFloat(datos[7])+parseFloat(datos[8]))));
+						brozecgm 	= ((4.57/dwhim)-4.142)*100;
+						sirigm 		= ((4.95/dwhim)-4.5)*100;
+
+						$.ajax({
+							type:"POST",
+							url:'deportresut.php',
+							data:({
+								IDP : $('#IDPC').html(),
+								Densidad: densidad,
+								Brozec : brozec,
+								Siri : siri,
+								Masao :masao,
+								masarh :masarh,
+								masarm  : masarm ,
+								brozeck  : brozeck ,
+								sirik  : sirik ,
+								rosemm  : rosemm ,
+								rosep  : rosep ,
+								mlg  : mlg ,
+								dwhi  : dwhi ,
+								sirig  : sirig ,
+								brozecg  : brozecg ,
+								dwhim  : dwhim ,
+								brozecgm  : brozecgm ,
+								sirigm  : sirigm ,
+								durinc  : c,
+								durinm  : m  
+								}),
+								success: function(data){
+									alert('Consulta generada con exito');
+								},error: function(err){
+										console.log(err);
+									}
+						});
+
+					},error: function(err){
+							console.log(err);
+						  }
+			});
+		break;
+	}
+}
+
 
 
 });
