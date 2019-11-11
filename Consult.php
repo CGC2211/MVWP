@@ -78,7 +78,7 @@
 
     function resultsDep($data){
         $conn = mysqli_connect("localhost", "root", "", "pacientes") or die ("Error al conectar");
-        $sql = "SELECT * FROM `consultadeportista` WHERE IDP = '$data[0]' and FechaConsulta <= '$data[1]' ";
+        $sql = "SELECT * FROM `resultadosdeportista` WHERE IDP = '$data[0]' and FechaConsulta <= '$data[1]' ";
         
         if (mysqli_query($conn, $sql)) {
                     //$sql = "";

@@ -532,3 +532,8 @@ nav{
     width: 40%;
     order:2;
 }
+
+#graficas canvas{
+  width: 250px;
+  height: 250px;
+}

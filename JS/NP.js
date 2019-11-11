@@ -4,7 +4,7 @@ let modals = document.getElementById('ModalSeguimiento');
 const hamburger = document.querySelector('.hamburger');
 const navlinks = document.querySelector('.nav-links');
 const links = document.querySelectorAll('.nav-links li');
-let rdep = 
+var myPieChart;
 
 $(document).ready(function(){
 
@@ -433,7 +433,7 @@ function fillprevinfo(tipo , id, sexo,edad,estatura){
 							$.each(data, function(index, object) {	  
 							   $('.archive_month').append(
 								   `
-									<li class="rdeport"><span>Fecha de la consulta </span>
+									<li data-peso="${object.Peso}" class="rdeport"><span>Fecha de la consulta </span>
 									<span> ${object.FechaConsulta} </span><span class="fa fa-plus"></span>
 										<ul class="rdeportul">							   
 											<li data-value="${object.Peso}" class="row${index}" >Peso ${object.Peso}</li>
@@ -477,12 +477,11 @@ $('body').on('click', 'li.rdeport', function() {
 });
 
 $('body').on('click', 'input.depgraf', function() { 
-   resultados($(this).attr('data-id'),$(this).attr('data-fecha'));
-	console.log($(this).parent().parent());
+   resultados($(this).attr('data-id'),$(this).attr('data-fecha'),$(this).attr('data-index'));
    $(this).parent().parent().parent().find('ul').slideToggle();
 });
 
-function resultados(id,fecha){
+function resultados(id,fecha, index){
 	let datos = [];
 	datos.push(id);
 	datos.push(fecha);
@@ -492,12 +491,52 @@ function resultados(id,fecha){
 		data:({ "callresultsdep": datos}),
 		dataType:"json",
 			success: function(data){
-				console.log(data);
-				
+				Graficar(data,index);
 			},error: function(err){
 				console.log(err);
 			  }
 	});
+}
+
+function Graficar(data,indexb){
+	let dates = [];
+	let peso = [];
+	let siri = [];
+	let brozec = [];
+	let rosemm = [];
+	let i = 0;
+	$('.rdeport').each(function(index){
+		if(i <=  indexb){
+			peso.push($(this).attr('data-peso'));
+		}
+		i++;
+		
+	});
+	
+	for(i = 0; i< data.length; i++ ){
+		dates.push(data[i].FechaConsulta);
+		siri.push(data[i].Siri);
+		brozec.push(data[i].Brozec);
+		rosemm.push(data[i].rosemm);
+	 } 
+	 $('#graficas').css("display","flex");
+	 var ctxP = document.getElementById("pesochart").getContext('2d'); 
+	            	  	myPieChart = new Chart(ctxP, {
+				      	type: 'line',
+				      	data: {
+					        datasets: [{
+								  data: peso,
+								  fill: false,
+								  label: "My First dataset"
+						        }],
+						        labels: dates
+					      	},
+					      	options: {
+								responsive: true
+					      	}
+				    	});  
+
+
 }
 
 $('body').on('click', 'input.segbtn', function() {
