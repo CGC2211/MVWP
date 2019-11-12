@@ -209,9 +209,46 @@
 									</tr>
 						</thead>
 						<tbody id="table-result-body"></tbody>				
-								
-
 					</table>
+			</div>
+
+			<div id="table-graphics" style="display: none;">
+				<div style="height: 200px; overflow: scroll; display: flex; flex-direction: row;">
+					<table id="resulttable">
+						<thead>
+							<tr>
+									<th>Fecha</th>
+									<th>Peso</th>
+									<th>Brozeck % Grasa:</th>
+									<th>Siri % Grasa: </th>
+									<th>Masa Ósea:</th>
+									<th>Masa Residual</th>
+									<th>Rose MM (kg): </th>
+									<th>Rose MM%:</th>
+									<th>MLG Kg: </th>
+									<th>Brozeck KG:</th>
+									<th>Siri KG: </th>
+							</tr>
+						</thead>
+						<tbody id="resulttablebody">
+
+						</tbody>
+					</table>
+				</div>
+				<div id="graficas" style="display: none; flex-direction: row;">
+					 <div>
+						 <canvas id="pesochart" width="200px" height="200px"></canvas>
+					 </div>	
+					 <div>
+						 <canvas id="sirichart" width="200px" height="200px"></canvas>
+					 </div>
+					 <div>
+						 <canvas id="brozekchart" width="200px" height="200px"></canvas>
+					 </div>
+					 <div>
+						 <canvas id="rosemmchart" width="200px" height="200px"></canvas>
+					 </div>
+				</div>
 			</div>
 			
 			<div id="myModal" class="modal">
@@ -250,12 +287,7 @@
 										</div>
 								</div>
 
-								<div id="graficas" style="display: none;">
-										<canvas id="pesochart"></canvas>
-										<canvas id="sirichart"></canvas>
-										<canvas id="brozekchart"></canvas>
-										<canvas id="rosemmchart"></canvas>
-								</div>
+								
 								
 						</div>
 					</div>

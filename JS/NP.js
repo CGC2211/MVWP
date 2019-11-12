@@ -478,20 +478,53 @@ $('body').on('click', 'li.rdeport', function() {
 
 $('body').on('click', 'input.depgraf', function() { 
    resultados($(this).attr('data-id'),$(this).attr('data-fecha'),$(this).attr('data-index'));
-   $(this).parent().parent().parent().find('ul').slideToggle();
+   
+   $('#table-graphics').css('display', 'flex');
+   modals.style.display = 'none';
+   //$(this).parent().parent().parent().find('ul').slideToggle();
 });
 
-function resultados(id,fecha, index){
+function resultados(id,fecha, indexb){
 	let datos = [];
+	let peso = [];
+	let i = 0;
 	datos.push(id);
 	datos.push(fecha);
+	$('.rdeport').each(function(index){
+		if(i <=  indexb){
+			peso.push($(this).attr('data-peso'));
+		}
+		i++;
+		
+	});
 	$.ajax({
 		type:"POST",
 		url:'Consult.php',
 		data:({ "callresultsdep": datos}),
 		dataType:"json",
 			success: function(data){
-				Graficar(data,index);
+				$.each(data, function(index, object){
+					$('#resulttablebody').append(
+							`
+							<tr>
+								<td scope="row">${object.FechaConsulta}</td>
+								<td>${peso[index]}</td>
+								<td>${object.Brozec}</td>
+								<td>${object.Siri}</td>
+								<td>${object.Masao}</td>
+								<td>${object.masarm}</td>
+								<td>${object.rosemm}</td>
+								<td>${object.rosep}</td>
+								<td>${object.mlg}</td>
+								<td>${object.brozeck}</td>
+								<td>${object.sirik}</td>
+							</tr>
+							`
+						);
+				})
+
+				
+				Graficar(data,indexb);
 			},error: function(err){
 				console.log(err);
 			  }
@@ -527,15 +560,114 @@ function Graficar(data,indexb){
 					        datasets: [{
 								  data: peso,
 								  fill: false,
-								  label: "My First dataset"
+								  label: "Seguimiento de Peso "
 						        }],
 						        labels: dates
 					      	},
 					      	options: {
-								responsive: true
+								responsive: true,
+								legend: {
+									labels:{
+										defaultFontSize: 18
+									}
+								},
+								scales: {
+									yAxes: [{
+										ticks: {
+											autoSkip: true,
+											maxTicksLimit: 5
+										}
+									}]
+								}
 					      	}
-				    	});  
+						});  
+	var ctxP = document.getElementById("sirichart").getContext('2d'); 
+	myPieChart = new Chart(ctxP, {
+	type: 'line',
+	data: {
+		datasets: [{
+			data: siri,
+			fill: false,
+			label: "Seguimiento de Siri"
+			}],
+			labels: dates
+		},
+		options: {
+			responsive: true,
+			legend: {
+				labels:{
+					defaultFontSize: 18
+				}
+			},
+			scales: {
+				yAxes: [{
+					ticks: {
+						autoSkip: true,
+						maxTicksLimit: 5
+					}
+				}]
+			}
+			
+		}
+	});  
 
+	var ctxP = document.getElementById("rosemmchart").getContext('2d'); 
+	myPieChart = new Chart(ctxP, {
+	type: 'line',
+	data: {
+		datasets: [{
+			data: rosemm,
+			fill: false,
+			label: "Seguimiento de Rosemm"
+			}],
+			labels: dates
+		},
+		options: {
+			responsive: true,
+			legend: {
+				labels:{
+					defaultFontSize: 18
+				}
+			},scales: {
+				yAxes: [{
+					ticks: {
+						autoSkip: true,
+						maxTicksLimit: 5
+					}
+				}]
+			}
+			
+		}
+	});
+
+	var ctxP = document.getElementById("brozekchart").getContext('2d'); 
+	myPieChart = new Chart(ctxP, {
+	type: 'line',
+	data: {
+		datasets: [{
+			data: brozec,
+			fill: false,
+			label: "Seguimiento de Brozeck"
+			}],
+			labels: dates
+		},
+		options: {
+			responsive: true,
+			legend: {
+				labels:{
+					defaultFontSize: 18
+				}
+			},scales: {
+				yAxes: [{
+					ticks: {
+						autoSkip: true,
+						maxTicksLimit: 5
+					}
+				}]
+			}
+			
+		}
+	});
 
 }
 

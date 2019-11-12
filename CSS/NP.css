@@ -533,7 +533,17 @@ nav{
     order:2;
 }
 
-#graficas canvas{
-  width: 250px;
-  height: 250px;
+#table-graphics{
+  width: 100%;
+  flex-direction: column;
+}
+
+#resulttable{
+  width: 100%;
+  text-align: center;
+}
+
+#graficas div {
+  width: 400px;
+  height: 400px;
 }
