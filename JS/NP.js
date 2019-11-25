@@ -320,7 +320,7 @@ function apendresults(data){
 		   <tr  indice="${index}">
 		   <td scope="row">${object.Name}</td>
 		   <td>${object.EDAD}</td>
-		   <th><a class="consultas" data-id="${object.ID}" data-Tipo=${object.TIPO} data-talla="${object.ESTATURA}" data-Edad="${object.EDAD}" data-sexo="${object.SEXO}" ><span class="fa fa-search"></span></a></th>
+		   <th><a class="consultas" data-name="${object.Name}"  data-id="${object.ID}" data-Tipo=${object.TIPO} data-talla="${object.ESTATURA}" data-Edad="${object.EDAD}" data-sexo="${object.SEXO}" ><span class="fa fa-search"></span></a></th>
 		   <th><a class="nseguimiento" data-talla="${object.ESTATURA}" data-Edad="${object.EDAD}" data-sexo="${object.SEXO}" data-Tipo=${object.TIPO} data-id="${object.ID}"> <span class="addcon fa fa-list"></span></a></th>
 		   </tr>
 		   `
@@ -335,6 +335,7 @@ function apendresults(data){
 $(document).on('click', '.consultas', function () {
 	
 	fillprevinfo($(this).attr('data-Tipo'), $(this).attr('data-id'), $(this).attr('data-sexo'), $(this).attr('data-Edad'), $(this).attr('data-talla'));
+	$('#paciente').html($(this).attr('data-Name'));
 	modal.style.display = 'flex';
 
 });
@@ -383,9 +384,6 @@ $('#close').click(function(){
 		$(this).val('');
 	});
 });
-
-
-//$('.archive_month ul').hide();
 
 
 function fillprevinfo(tipo , id, sexo,edad,estatura){
@@ -529,27 +527,20 @@ function resultados(id,fecha, indexb){
 				})
 
 				
-				Graficar(data,indexb);
+				Graficar(data,peso);
 			},error: function(err){
 				console.log(err);
 			  }
 	});
 }
 
-function Graficar(data,indexb){
+function Graficar(data,peso){
 	let dates = [];
-	let peso = [];
 	let siri = [];
 	let brozec = [];
 	let rosemm = [];
 	let i = 0;
-	$('.rdeport').each(function(index){
-		if(i <=  indexb){
-			peso.push($(this).attr('data-peso'));
-		}
-		i++;
-		
-	});
+
 	
 	for(i = 0; i< data.length; i++ ){
 		dates.push(data[i].FechaConsulta);
@@ -563,9 +554,10 @@ function Graficar(data,indexb){
 				      	type: 'line',
 				      	data: {
 					        datasets: [{
-								  data: peso,
-								  fill: false,
-								  label: "Seguimiento de Peso "
+								fillColor: "#2427ff",
+								strokeColor: "#2427ff",
+								data: peso,
+								label: "Seguimiento de Peso "
 						        }],
 						        labels: dates
 					      	},
@@ -592,7 +584,7 @@ function Graficar(data,indexb){
 	data: {
 		datasets: [{
 			data: siri,
-			fill: false,
+			fillColor: "#0099ff",
 			label: "Seguimiento de Siri"
 			}],
 			labels: dates
@@ -622,7 +614,7 @@ function Graficar(data,indexb){
 	data: {
 		datasets: [{
 			data: rosemm,
-			fill: false,
+			fillColor: "#6a9eba",
 			label: "Seguimiento de Rosemm"
 			}],
 			labels: dates
@@ -651,7 +643,7 @@ function Graficar(data,indexb){
 	data: {
 		datasets: [{
 			data: brozec,
-			fill: false,
+			fillColor: "#585bad",
 			label: "Seguimiento de Brozeck"
 			}],
 			labels: dates
@@ -874,5 +866,28 @@ function insertseguimiento(tipo){
 }
 
 
-
 });
+
+function generarpdf(){
+	var pesochart = document.getElementById('pesochart');
+	var sirichart = document.getElementById('sirichart');
+	var brozekchart = document.getElementById('brozekchart');
+	var rosemmchart = document.getElementById('rosemmchart');
+	var doc = new jsPDF('vertical','mm','letter');
+	let texto = "Resultados de " + $('#paciente').text();
+	doc.text(15,10,texto);
+	doc.autoTable({html: '#resulttable'});
+	var today = new Date();
+	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()+'-'+today.getSeconds();
+	var imgData = pesochart.toDataURL("image/PNG", 1.0);
+    doc.addPage();
+	doc.addImage(imgData, 'PNG', 10, 0);
+	imgData = sirichart.toDataURL("image/PNG",1.0);
+	doc.addImage(imgData, 'JPEG', 10, 125);
+	doc.addPage();
+	imgData = brozekchart.toDataURL("image/PNG",1.0);
+    doc.addImage(imgData, 'JPEG', 10, 0);
+	imgData = rosemmchart.toDataURL("image/PNG",1.0);
+    doc.addImage(imgData, 'JPEG', 10, 125);
+	doc.save('paciente'+date+ '.pdf');
+}

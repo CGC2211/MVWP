@@ -6,6 +6,12 @@
 		<title>Nuevos Pacientes</title>
 		<link type="text/css" href="css/NP.css" rel="stylesheet">
 		<script src="js/jquery.js" type="text/javascript"></script>
+		<!--jspdf.js-->
+		<script src="js/jspdf.min.js" type="text/javascript"></script>
+		<script src="js/jspdf-autotable.js" type="text/javascript"></script>
+		
+		<!--html2canvas-->
+		<script  src="js/html2canvas.js" type="text/javascript"></script>
 	</head>
 	<body>
 
@@ -249,6 +255,9 @@
 						 <canvas id="rosemmchart" width="200px" height="200px"></canvas>
 					 </div>
 				</div>
+				<div style="text-align: center;">
+					<button onclick="generarpdf()">Generar PDF</button>
+				</div>
 			</div>
 			
 			<div id="myModal" class="modal">
@@ -429,7 +438,9 @@
 							</div>
 						</div>
 					</div>
-				</div>
+			</div>
+
+			<span id="paciente" style="display: none;"></span>
 
 		</div>
 		
@@ -437,4 +448,6 @@
 	</body>
 	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.2/dist/Chart.min.js"></script>
 	<script src="js/NP.js" type="text/javascript"></script>
+	
+	
 </html>

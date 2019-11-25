@@ -534,6 +534,7 @@ nav{
 }
 
 #table-graphics{
+  margin-top: 10px;
   width: 100%;
   flex-direction: column;
 }
