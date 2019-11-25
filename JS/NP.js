@@ -295,6 +295,7 @@ $("#find").click( function(){
 		alert("Ingrese un valor a buscar");
 	}else{
 		$("#table-result-body").empty();
+		$('#table-graphics').css('display', 'none');
 		$.ajax({
 			type:"POST",
 			url:'Consult.php',
@@ -418,6 +419,7 @@ function fillprevinfo(tipo , id, sexo,edad,estatura){
 						console.log(err);
 					  }
 			});
+			$('#tblsegn').show();
 		break;
 		case "Deportista":
 				$('#tblsegn').hide();
@@ -468,6 +470,7 @@ function fillprevinfo(tipo , id, sexo,edad,estatura){
 							console.log(err);
 						  }
 				});
+				$('#tblsegd').show();
 		break;
 	}
 };
@@ -480,7 +483,8 @@ $('body').on('click', 'input.depgraf', function() {
    resultados($(this).attr('data-id'),$(this).attr('data-fecha'),$(this).attr('data-index'));
    
    $('#table-graphics').css('display', 'flex');
-   modals.style.display = 'none';
+   $(".archive_month").empty();
+   modal.style.display = 'none';
    //$(this).parent().parent().parent().find('ul').slideToggle();
 });
 
@@ -497,6 +501,7 @@ function resultados(id,fecha, indexb){
 		i++;
 		
 	});
+	$('#resulttablebody').empty();
 	$.ajax({
 		type:"POST",
 		url:'Consult.php',
