@@ -101,6 +101,52 @@
         } 
     }
 
+    function grafresult($datos){
+        
+        $conn = mysqli_connect("localhost", "root", "", "pacientes") or die ("Error al conectar");
+        $sql = "SELECT c.FechaConsulta, c.Peso, r.Brozec, r.Siri,r.Masao,r.masarh,r.masarm,r.rosemm,r.rosep,r.brozeck,r.sirik FROM resultadosdeportista r, consultadeportista c WHERE r.IDP = c.IDP and r.IDP = $datos  AND c.FechaConsulta = r.FechaConsulta ORDER by r.FechaConsulta ASC LIMIT 5 ";
+        
+        if (mysqli_query($conn, $sql)) {
+                    //$sql = "";
+                    $result = $conn->query($sql);
+                    if ($result->num_rows > 0) {
+                        // output data of each row
+                        while($row = $result->fetch_assoc()) {
+                            $new_array[] = $row;
+                            
+                        }
+                        //echo $new_array;
+                        print json_encode($new_array);
+                    } 
+        
+                       //echo "<script>alert('Usuario Guardado exitosamente');</script>";
+                    //header('location: index2.php');
+              
+        } else {
+              echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+        } 
+   
+    }
+
+    function lastconsult($data){
+        $conn = mysqli_connect("localhost", "root", "", "pacientes") or die ("Error al conectar");
+        $sql = "SELECT r.*, c.* FROM resultadosdeportista r, consultadeportista c WHERE c.IDP = r.IDP and c.IDP = '$data' order by r.FechaConsulta DESC LIMIT 1";
+        
+        if (mysqli_query($conn, $sql)) {
+                    $result = $conn->query($sql);
+                    if ($result->num_rows > 0) {
+                        while($row = $result->fetch_assoc()) {
+                            $new_array[] = $row;
+                            
+                        }
+                        print json_encode($new_array);
+                    } 
+              
+        } else {
+              echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+        } 
+    }
+
     if (isset($_POST['callFunc1'])) {
         echo func1($_POST['callFunc1']);
     }
@@ -117,5 +163,12 @@
         echo resultsDep($_POST['callresultsdep']);
     }
 
+    if (isset($_POST['callgraf'])) {
+        echo grafresult($_POST['callgraf']);
+    }
+
+    if (isset($_POST['calllastconsult'])) {
+        echo lastconsult($_POST['calllastconsult']);
+    }
 
 ?>

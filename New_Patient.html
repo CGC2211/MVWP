@@ -204,44 +204,34 @@
 				<input type="button" class="roundedbtn" id="find" value="Buscar"/>
 			</div>
 
-			<div class="Seguimiento Seguimiento-results" style="display: none; margin-top: 15px;justify-content: center; height: 100%; overflow-x:auto;">
+			<div class="Seguimiento Seguimiento-results" style="display: none; margin-top: 15px;">
 					<table id="table-result" class="">
 						<thead>
 								<tr class="">
 										<th>Nombre</th>
 										<th>Edad</th>
-										<th>Ver consultas</th>
-										<th>Realizar Seguimiento</th>
+										<th>Historial</th>
+										<th>Nueva Consulta</th>
+										<th>Reporte</th>
 									</tr>
 						</thead>
 						<tbody id="table-result-body"></tbody>				
 					</table>
 			</div>
 
-			<div id="table-graphics" style="display: none;">
-				<div style="height: 200px; overflow: scroll; display: flex; flex-direction: row;">
-					<table id="resulttable">
-						<thead>
-							<tr>
-									<th>Fecha</th>
-									<th>Peso</th>
-									<th>Brozeck % Grasa:</th>
-									<th>Siri % Grasa: </th>
-									<th>Masa Ósea:</th>
-									<th>Masa Residual</th>
-									<th>Rose MM (kg): </th>
-									<th>Rose MM%:</th>
-									<th>MLG Kg: </th>
-									<th>Brozeck KG:</th>
-									<th>Siri KG: </th>
-							</tr>
-						</thead>
-						<tbody id="resulttablebody">
+			<div class="datos-paciente " style="display: none;">
+				<h1 class="ultimaconsulta"></h1>
+				<span class="spname"></span>
+				<span class="spedad"></span>
+				<span class="spestatura"></span>
+			</div>
+			<div class="consulta ">
+			
+			</div>
 
-						</tbody>
-					</table>
-				</div>
-				<div id="graficas" style="display: none; flex-direction: row;">
+			<div id="table-graphics" style="display: none;">
+			
+				<div id="graficas" style="display: none; flex-direction: row; flex-wrap: wrap;">
 					 <div>
 						 <canvas id="pesochart" width="200px" height="200px"></canvas>
 					 </div>	
@@ -256,7 +246,7 @@
 					 </div>
 				</div>
 				<div style="text-align: center;">
-					<button onclick="generarpdf()">Generar PDF</button>
+					<a onclick="generarpdf()"><span class="fa fa-file-pdf-o"></span> Generar PDF</a>
 				</div>
 			</div>
 			
