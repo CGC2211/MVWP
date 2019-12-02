@@ -279,6 +279,9 @@ $(".optional").click(function(){
 			hidemenu();
 			$(".newpa").css("display","flex");
 			$(".Seguimiento").css("display","none");
+			$(".datos-paciente").css("display","none");
+			$('.consulta').css("display","none");
+			$('#table-graphics').css("display","none");
 		break;
 		case "SG":
 			hidemenu();
@@ -322,6 +325,7 @@ function apendresults(data){
 		   <td>${object.EDAD}</td>
 		   <th><a class="consultas" data-name="${object.Name}"  data-id="${object.ID}" data-Tipo=${object.TIPO} data-talla="${object.ESTATURA}" data-Edad="${object.EDAD}" data-sexo="${object.SEXO}" ><span class="fa fa-search"></span></a></th>
 		   <th><a class="nseguimiento" data-talla="${object.ESTATURA}" data-Edad="${object.EDAD}" data-sexo="${object.SEXO}" data-Tipo=${object.TIPO} data-id="${object.ID}"> <span class="addcon fa fa-list"></span></a></th>
+		   <th><a class="reporte" data-name="${object.Name}" data-talla="${object.ESTATURA}" data-Edad="${object.EDAD}" data-sexo="${object.SEXO}" data-Tipo=${object.TIPO} data-id="${object.ID}"> <span class=" fa fa-line-chart"></span></a></th>
 		   </tr>
 		   `
 		   );
@@ -338,6 +342,21 @@ $(document).on('click', '.consultas', function () {
 	$('#paciente').html($(this).attr('data-Name'));
 	modal.style.display = 'flex';
 
+});
+
+$(document).on('click', '.reporte', function () {
+
+	
+	 $('.spname').html("Nombre: " + $(this).attr('data-name'));
+	 $('.spedad').html("Edad: " + $(this).attr('data-Edad'));
+	 $('.spestatura').html("Estatura: " + $(this).attr('data-talla'));
+
+	resultados($(this).attr('data-id'));
+   $('.consulta').css('display', 'flex');
+   $('#table-graphics').css('display', 'flex');
+   $('.datos-paciente').css('display', 'flex');
+   $(".archive_month").empty();
+   modal.style.display = 'none';
 });
 
 $(document).on('click','.nseguimiento', function(){
@@ -478,84 +497,96 @@ $('body').on('click', 'li.rdeport', function() {
 });
 
 $('body').on('click', 'input.depgraf', function() { 
-   resultados($(this).attr('data-id'),$(this).attr('data-fecha'),$(this).attr('data-index'));
    
-   $('#table-graphics').css('display', 'flex');
-   $(".archive_month").empty();
-   modal.style.display = 'none';
    //$(this).parent().parent().parent().find('ul').slideToggle();
 });
 
-function resultados(id,fecha, indexb){
-	let datos = [];
-	let peso = [];
-	let i = 0;
-	datos.push(id);
-	datos.push(fecha);
-	$('.rdeport').each(function(index){
-		if(i <=  indexb){
-			peso.push($(this).attr('data-peso'));
-		}
-		i++;
-		
-	});
-	$('#resulttablebody').empty();
+function resultados(id){
+	
+
+	$('.consulta').empty();
 	$.ajax({
 		type:"POST",
 		url:'Consult.php',
-		data:({ "callresultsdep": datos}),
+		data:({ "calllastconsult": id}),
 		dataType:"json",
 			success: function(data){
 				$.each(data, function(index, object){
-					$('#resulttablebody').append(
+					$('.consulta').append(
 							`
-							<tr>
-								<td scope="row">${object.FechaConsulta}</td>
-								<td>${peso[index]}</td>
-								<td>${object.Brozec}</td>
-								<td>${object.Siri}</td>
-								<td>${object.Masao}</td>
-								<td>${object.masarm}</td>
-								<td>${object.rosemm}</td>
-								<td>${object.rosep}</td>
-								<td>${object.mlg}</td>
-								<td>${object.brozeck}</td>
-								<td>${object.sirik}</td>
-							</tr>
+							<div>Peso: ${object.Peso}</div>
+							<div>Bicep: ${object.Bicep}</div>
+							<div>Tricep: ${object.Tricep}</div>
+							<div>Subescapular: ${object.Subescapular}</div>
+							<div>Cresta iliaca: ${object.Crestai}</div>
+							<div>Supra-espinoso: ${object.Suprae}</div>
+							<div>Abdominal: ${object.Abdominal}</div>
+							<div>Muslo Medio: ${object.MusloMedio}</div>
+							<div>Pantorrilla: ${object.Pantorrilla}</div>
+							<div>Bicep Relax: ${object.BicepRelax}</div>
+							<div>Bicep Flex: ${object.BicepFlex}</div>
+							<div>Cintura Minima: ${object.CinMin}</div>
+							<div>Cadera Maxima: ${object.CadMax}</div>
+							<div>Pantorrilla Maxima: ${object.PantMax}</div>
+							<div>Humero: ${object.Humero}</div>
+							<div>Femur: ${object.Femur}</div>
+							<div>VO2Max: ${object.VO2Max}</div>
+							<div>Umbral: ${object.Umbral}</div>
+							<div>1 RM Bench: ${object.RMBench}</div>
+							<div>1 RM Squat: ${object.RMSquat}</div>							
 							`
-						);
+						);	
 				})
-
 				
-				Graficar(data,peso);
+					
 			},error: function(err){
 				console.log(err);
 			  }
+
 	});
+
+	$.ajax({
+					type:"POST",
+					url:'Consult.php',
+					data:({ "callgraf": id}),
+					dataType:"json",
+						success: function(data){
+							Graficar(data);
+						},error: function(err){
+							console.log(err);
+						}
+					});
+	
+
+	
 }
 
-function Graficar(data,peso){
+function Graficar(data){
+	
 	let dates = [];
+	let peso = [];
 	let siri = [];
 	let brozec = [];
 	let rosemm = [];
-	let i = 0;
 
-	
 	for(i = 0; i< data.length; i++ ){
 		dates.push(data[i].FechaConsulta);
 		siri.push(data[i].Siri);
 		brozec.push(data[i].Brozec);
 		rosemm.push(data[i].rosemm);
+		peso.push(data[i].Peso);
+		
 	 } 
+	 $('.ultimaconsulta').html("Fecha de la ultima consulta: " + dates[4]);
+	
 	 $('#graficas').css("display","flex");
 	 var ctxP = document.getElementById("pesochart").getContext('2d'); 
 	            	  	myPieChart = new Chart(ctxP, {
 				      	type: 'line',
 				      	data: {
 					        datasets: [{
-								fillColor: "#2427ff",
-								strokeColor: "#2427ff",
+								
+								
 								data: peso,
 								label: "Seguimiento de Peso "
 						        }],
@@ -563,6 +594,8 @@ function Graficar(data,peso){
 					      	},
 					      	options: {
 								responsive: true,
+								fillColor: "#2427ff",
+								strokeColor: "#2427ff",
 								legend: {
 									labels:{
 										defaultFontSize: 18
@@ -571,8 +604,16 @@ function Graficar(data,peso){
 								scales: {
 									yAxes: [{
 										ticks: {
-											autoSkip: true,
+											autoSkip: false,
 											maxTicksLimit: 5
+											
+										}
+									}],
+									 xAxes: [{
+										ticks: {
+											autoSkip: false,
+											maxRotation: 90,
+											minRotation: 90
 										}
 									}]
 								}
@@ -600,7 +641,14 @@ function Graficar(data,peso){
 				yAxes: [{
 					ticks: {
 						autoSkip: true,
-						maxTicksLimit: 5
+						maxTicksLimit: 5,
+					}
+				}],
+				xAxes: [{
+					ticks: {
+						autoSkip: false,
+						maxRotation: 90,
+						minRotation: 90
 					}
 				}]
 			}
@@ -629,7 +677,14 @@ function Graficar(data,peso){
 				yAxes: [{
 					ticks: {
 						autoSkip: true,
-						maxTicksLimit: 5
+						maxTicksLimit: 5,
+					}
+				}],
+				xAxes: [{
+					ticks: {
+						autoSkip: false,
+						maxRotation: 90,
+						minRotation: 90
 					}
 				}]
 			}
@@ -658,7 +713,15 @@ function Graficar(data,peso){
 				yAxes: [{
 					ticks: {
 						autoSkip: true,
-						maxTicksLimit: 5
+						maxTicksLimit: 5,
+					
+					}
+				}],
+				xAxes: [{
+					ticks: {
+						autoSkip: false,
+						maxRotation: 90,
+						minRotation: 90
 					}
 				}]
 			}
@@ -682,6 +745,8 @@ $('body').on('click', 'input.segbtn', function() {
 			});
 		}
 	});
+
+
 
 
 function validates(){
@@ -864,8 +929,6 @@ function insertseguimiento(tipo){
 		break;
 	}
 }
-
-
 });
 
 function generarpdf(){
@@ -874,20 +937,21 @@ function generarpdf(){
 	var brozekchart = document.getElementById('brozekchart');
 	var rosemmchart = document.getElementById('rosemmchart');
 	var doc = new jsPDF('vertical','mm','letter');
-	let texto = "Resultados de " + $('#paciente').text();
-	doc.text(15,10,texto);
-	doc.autoTable({html: '#resulttable'});
+	/*let texto = "Resultados de " + $('.spname').html();
+	doc.text(15,10,texto);*/
+	doc.fromHTML($('.datos-paciente').html(),15,15);
+	doc.fromHTML($('.consulta').html(),15,45);
 	var today = new Date();
 	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()+'-'+today.getSeconds();
 	var imgData = pesochart.toDataURL("image/PNG", 1.0);
-    doc.addPage();
-	doc.addImage(imgData, 'PNG', 10, 0);
+    
+	doc.addImage(imgData, 'PNG', 0, 135);
 	imgData = sirichart.toDataURL("image/PNG",1.0);
-	doc.addImage(imgData, 'JPEG', 10, 125);
+	doc.addImage(imgData, 'JPEG', 105, 135);
 	doc.addPage();
 	imgData = brozekchart.toDataURL("image/PNG",1.0);
-    doc.addImage(imgData, 'JPEG', 10, 0);
+    doc.addImage(imgData, 'JPEG', 0, 0);
 	imgData = rosemmchart.toDataURL("image/PNG",1.0);
-    doc.addImage(imgData, 'JPEG', 10, 125);
+    doc.addImage(imgData, 'JPEG', 105, 0);
 	doc.save('paciente'+date+ '.pdf');
 }
