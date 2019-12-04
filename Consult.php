@@ -53,7 +53,7 @@
 
     function funcDeport($data){
         $conn = mysqli_connect("localhost", "root", "", "pacientes") or die ("Error al conectar");
-        $sql = "SELECT * FROM `consultadeportista` WHERE IDP = '$data'";
+        $sql = "SELECT c.*, r.* FROM consultadeportista c, resultadosdeportista r WHERE c.IDP = '$data' and r.IDP = '$data' and c.IDP = r.IDP and c.FechaConsulta = r.FechaConsulta" ;
         
         if (mysqli_query($conn, $sql)) {
                     //$sql = "";

@@ -475,7 +475,22 @@ function fillprevinfo(tipo , id, sexo,edad,estatura){
 											<li data-value="${object.Umbral}" class="row${index}" >Umbral ${object.Umbral}</li>
 											<li data-value="${object.RMBench}" class="row${index}" >1 RM Bench ${object.RMBench}</li>
 											<li data-value="${object.RMSquat}" class="row${index}" >1 RM Squat ${object.RMSquat}</li>
-											<li><input class="depgraf" data-fecha="${object.FechaConsulta}" data-id="${object.IDP}" data-index="${index}" type="button" value="Graficar"/></li>
+											<li data-value="${object.Densidad}" class="row${index}" >Densidad ${object.Densidad}</li>
+											<li data-value="${object.Brozec}" class="row${index}" >Brozec ${object.Brozec}</li>
+											<li data-value="${object.Siri}" class="row${index}" >Siri ${object.Siri}</li>
+											<li data-value="${object.Masao}" class="row${index}" >Masa Ósea: ${object.Masao}</li>
+											<li data-value="${$('#sexolabel').html(sexo) == 'Masculino' ? object.masarh : object.masarm}" class="row${index}" >Masa Residual ${$('#sexolabel').html(sexo) == 'Masculino' ? object.masarh : object.masarm}</li>
+											<li data-value="${object.rosemm}" class="row${index}" Rose MM (kg)  ${object.rosemm}</li>
+											<li data-value="${object.rosep}" class="row${index}" >Rose MM% ${object.rosep}</li>
+											<li data-value="${object.mlg}" class="row${index}" >MLG Kg:  ${object.mlg}</li>
+											<li data-value="${object.durinc}" class="row${index}" >Durnin	C ${object.durinc}</li>
+											<li data-value="${object.durinm}" class="row${index}" >Durnin	M ${object.durinm}</li>
+											<li data-value="${object.brozeck}" class="row${index}" >Brozeck KG ${object.brozeck}</li>
+											<li data-value="${object.sirik}" class="row${index}" >Siri KG  ${object.sirik}</li>
+											<li data-value="${$('#sexolabel').html(sexo) == 'Masculino' ? object.dwhi : object.dwhim}" class="row${index}" >D. whiteres ${$('#sexolabel').html(sexo) == 'Masculino' ? object.dwhi : object.dwhim}</li>
+											<li data-value="${$('#sexolabel').html(sexo) == 'Masculino' ? object.brozecg : object.brozecgm}" class="row${index}" >Brozeck % Grasa:${$('#sexolabel').html(sexo) == 'Masculino' ? object.brozcg : object.brozecgm}</li>
+											<li data-value="${$('#sexolabel').html(sexo) == 'Masculino' ? object.sirig : object.sirigm}" class="row${index}" >Siri % Grasa:  ${$('#sexolabel').html(sexo) == 'Masculino' ? object.sirig : object.sirigm}</li>
+
 										</ul>
 										
 									</li>
