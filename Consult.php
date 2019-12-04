@@ -3,7 +3,11 @@
     
     function func1($data){
         $conn = mysqli_connect("localhost", "root", "", "pacientes") or die ("Error al conectar");
-        $sql = "SELECT ID, concat_ws(' ',NOMBRE,APELLIDOP, APELLIDOM) as 'Name', EDAD, SEXO, TIPO, ESTATURA FROM `infobasica` WHERE concat_ws(' ',NOMBRE,APELLIDOP, APELLIDOM) like '%$data%'";
+        $sql = "SELECT i.ID, concat_ws(' ',i.NOMBRE,i.APELLIDOP, i.APELLIDOM) as 'Name', i.EDAD, i.SEXO, i.TIPO, i.ESTATURA,
+        (SELECT COUNT(c.FechaConsulta) from consultanormal c WHERE c.IDP = i.ID) as 'Normal', 
+        (SELECT COUNT(d.FechaConsulta) from consultadeportista d WHERE d.IDP = i.ID) as 'Deportista'
+        FROM infobasica i 
+        WHERE concat_ws(' ',i.NOMBRE,i.APELLIDOP, i.APELLIDOM) like '%$data%'";
         
         if (mysqli_query($conn, $sql)) {
                     //$sql = "";

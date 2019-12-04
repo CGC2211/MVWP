@@ -325,7 +325,20 @@ function apendresults(data){
 		   <td>${object.EDAD}</td>
 		   <th><a class="consultas" data-name="${object.Name}"  data-id="${object.ID}" data-Tipo=${object.TIPO} data-talla="${object.ESTATURA}" data-Edad="${object.EDAD}" data-sexo="${object.SEXO}" ><span class="fa fa-search"></span></a></th>
 		   <th><a class="nseguimiento" data-talla="${object.ESTATURA}" data-Edad="${object.EDAD}" data-sexo="${object.SEXO}" data-Tipo=${object.TIPO} data-id="${object.ID}"> <span class="addcon fa fa-list"></span></a></th>
-		   <th><a class="reporte" data-name="${object.Name}" data-talla="${object.ESTATURA}" data-Edad="${object.EDAD}" data-sexo="${object.SEXO}" data-Tipo=${object.TIPO} data-id="${object.ID}"> <span class=" fa fa-line-chart"></span></a></th>
+			<th><a class="reporte" data-name="${object.Name}" data-talla="${object.ESTATURA}" data-Edad="${object.EDAD}" data-sexo="${object.SEXO}" data-Tipo=${object.TIPO} data-id="${object.ID}"> <span class=" fa fa-line-chart"></span></a></th>
+			${object.TIPO == "Normal"? 
+				object.Normal > 1 ?
+					`<th><a class="reporte" data-name="${object.Name}" data-talla="${object.ESTATURA}" data-Edad="${object.EDAD}" data-sexo="${object.SEXO}" data-Tipo=${object.TIPO} data-id="${object.ID}"> <span class=" fa fa-line-chart"></span></a></th>`
+				:
+					`<th><a> <span class=" fa fa-ban"></span></a></th>`
+			:
+
+				object.Deportista > 1 ?
+					`<th><a class="reporte" data-name="${object.Name}" data-talla="${object.ESTATURA}" data-Edad="${object.EDAD}" data-sexo="${object.SEXO}" data-Tipo=${object.TIPO} data-id="${object.ID}"> <span class=" fa fa-line-chart"></span></a></th>`
+				:
+					`<th><a> <span class=" fa fa-ban"></span></a></th>`
+			}
+		   
 		   </tr>
 		   `
 		   );
@@ -479,7 +492,7 @@ function fillprevinfo(tipo , id, sexo,edad,estatura){
 											<li data-value="${object.Brozec}" class="row${index}" >Brozec ${object.Brozec}</li>
 											<li data-value="${object.Siri}" class="row${index}" >Siri ${object.Siri}</li>
 											<li data-value="${object.Masao}" class="row${index}" >Masa Ósea: ${object.Masao}</li>
-											<li data-value="${$('#sexolabel').html(sexo) == 'Masculino' ? object.masarh : object.masarm}" class="row${index}" >Masa Residual ${$('#sexolabel').html(sexo) == 'Masculino' ? object.masarh : object.masarm}</li>
+											<li data-value="${sexo == 'Masculino' ? object.masarh : object.masarm}" class="row${index}" >Masa Residual ${sexo == 'Masculino' ? object.masarh : object.masarm}</li>
 											<li data-value="${object.rosemm}" class="row${index}" Rose MM (kg)  ${object.rosemm}</li>
 											<li data-value="${object.rosep}" class="row${index}" >Rose MM% ${object.rosep}</li>
 											<li data-value="${object.mlg}" class="row${index}" >MLG Kg:  ${object.mlg}</li>
@@ -487,9 +500,9 @@ function fillprevinfo(tipo , id, sexo,edad,estatura){
 											<li data-value="${object.durinm}" class="row${index}" >Durnin	M ${object.durinm}</li>
 											<li data-value="${object.brozeck}" class="row${index}" >Brozeck KG ${object.brozeck}</li>
 											<li data-value="${object.sirik}" class="row${index}" >Siri KG  ${object.sirik}</li>
-											<li data-value="${$('#sexolabel').html(sexo) == 'Masculino' ? object.dwhi : object.dwhim}" class="row${index}" >D. whiteres ${$('#sexolabel').html(sexo) == 'Masculino' ? object.dwhi : object.dwhim}</li>
-											<li data-value="${$('#sexolabel').html(sexo) == 'Masculino' ? object.brozecg : object.brozecgm}" class="row${index}" >Brozeck % Grasa:${$('#sexolabel').html(sexo) == 'Masculino' ? object.brozcg : object.brozecgm}</li>
-											<li data-value="${$('#sexolabel').html(sexo) == 'Masculino' ? object.sirig : object.sirigm}" class="row${index}" >Siri % Grasa:  ${$('#sexolabel').html(sexo) == 'Masculino' ? object.sirig : object.sirigm}</li>
+											<li data-value="${sexo == 'Masculino' ? object.dwhi : object.dwhim}" class="row${index}" >D. whiteres ${sexo == 'Masculino' ? object.dwhi : object.dwhim}</li>
+											<li data-value="${sexo == 'Masculino' ? object.brozecg : object.brozecgm}" class="row${index}" >Brozeck % Grasa:${sexo == 'Masculino' ? object.brozecg : object.brozecgm}</li>
+											<li data-value="${sexo == 'Masculino' ? object.sirig : object.sirigm}" class="row${index}" >Siri % Grasa:  ${sexo == 'Masculino' ? object.sirig : object.sirigm}</li>
 
 										</ul>
 										
