@@ -21,74 +21,75 @@ function hidemenu(){
 		link.classList.toggle("fade");
 	})
 }
-  $("#tipodepaciente").change(function(){
-  	var paciente = $(this).val();
-  		var width = $('#geneales').width();
-  		switch(paciente){
-  			case "Normal":
-  				$(".normal").css("display","flex");
-  				//$(".normal").css("width",width + 11);
 
-  				$(".Deportista").css("display","none");
-  			break;
-  			case "Deportista":
-  				$(".normal").css("display","none");
-				$(".Deportista").css("display","flex");
-				$(".Deportista").css("width",width + 11);
-  			break;
-  			default:
-  				$(".normal").hide();
-  				$(".Deportista").hide();
-  			break;
-  		}
-  });
+$("#tipodepaciente").change(function(){
+	var paciente = $(this).val();
+	var width = $('#geneales').width();
+	switch(paciente){
+		case "Normal":
+			$(".normal").css("display","flex");
+			//$(".normal").css("width",width + 11);
 
-  $("#btnsndnormal").click( function(){
-	
-		validate();
+			$(".Deportista").css("display","none");
+		break;
+		case "Deportista":
+			$(".normal").css("display","none");
+			$(".Deportista").css("display","flex");
+			$(".Deportista").css("width",width + 11);
+		break;
+		default:
+			$(".normal").hide();
+			$(".Deportista").hide();
+		break;
+	}
+});
 
-		if ($('.errorclass').length == 0){
-			$.ajax({
-				type:"POST",
-				url:'BasicData.php',
-				data:({Nombre: $('#inputnombre').val(),
-						Paterno: $('#inputapellidop').val(),
-						Materno: $('#inputapellidom').val(),
-						Sexo: $('#inputsexo').val(),
-						Edad: $('#inputedad').val(),
-						Estatura: $('#inputestatura').val(),
-						Tipo: $('#tipodepaciente').val() 
-					}),
-					success: function(data){
-						let id = data;
-						insertnormal(id);
-					}
-			});
-		}
-	});
+$("#btnsndnormal").click( function(){
 
-	$("#btnsnddeportista").click( function(){
-	
-		validate();
-		if ($('.errorclass').length == 0){
-			$.ajax({
-				type:"POST",
-				url:'BasicData.php',
-				data:({Nombre: $('#inputnombre').val(),
-						Paterno: $('#inputapellidop').val(),
-						Materno: $('#inputapellidom').val(),
-						Sexo: $('#inputsexo').val(),
-						Edad: $('#inputedad').val(),
-						Estatura: $('#inputestatura').val(),
-						Tipo: $('#tipodepaciente').val() 
-					}),
-					success: function(data){
-						let id = data;
-						insertdeport(id);
-					}
-			});
-		}
-	});
+	validate();
+
+	if ($('.errorclass').length == 0){
+		$.ajax({
+			type:"POST",
+			url:'BasicData.php',
+			data:({Nombre: $('#inputnombre').val(),
+					Paterno: $('#inputapellidop').val(),
+					Materno: $('#inputapellidom').val(),
+					Sexo: $('#inputsexo').val(),
+					Edad: $('#inputedad').val(),
+					Estatura: $('#inputestatura').val(),
+					Tipo: $('#tipodepaciente').val() 
+				}),
+				success: function(data){
+					let id = data;
+					insertnormal(id);
+				}
+		});
+	}
+});
+
+$("#btnsnddeportista").click( function(){
+
+	validate();
+	if ($('.errorclass').length == 0){
+		$.ajax({
+			type:"POST",
+			url:'BasicData.php',
+			data:({Nombre: $('#inputnombre').val(),
+					Paterno: $('#inputapellidop').val(),
+					Materno: $('#inputapellidom').val(),
+					Sexo: $('#inputsexo').val(),
+					Edad: $('#inputedad').val(),
+					Estatura: $('#inputestatura').val(),
+					Tipo: $('#tipodepaciente').val() 
+				}),
+				success: function(data){
+					let id = data;
+					insertdeport(id);
+				}
+		});
+	}
+});
 
 function validate(){
 	$('.element-general input').each(function(index){
@@ -128,6 +129,7 @@ function insertnormal(id){
 			}),
 			success: function(data){
 				alert("Paciente guardado con Exito");
+				clean();
 			},error: function(err){
 				alert(err);
 			  }
@@ -164,6 +166,7 @@ function insertdeport(id){
 			success: function(data){
 				alert("Paciente guardado con Exito");
 				insertdeportr(id);
+				clean();
 			},error: function(err){
 					console.log(err);
 				  }
@@ -268,6 +271,12 @@ function insertdeportr(id){
 			},error: function(err){
 					console.log(err);
 				  }
+	});
+}
+
+function clean(){
+	$('.inputsforms ').each(function(index){
+		$(this).val(''); 
 	});
 }
 
