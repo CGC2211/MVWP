@@ -334,7 +334,7 @@ function apendresults(data){
 		   <td>${object.EDAD}</td>
 		   <th><a class="consultas" data-name="${object.Name}"  data-id="${object.ID}" data-Tipo=${object.TIPO} data-talla="${object.ESTATURA}" data-Edad="${object.EDAD}" data-sexo="${object.SEXO}" ><span class="fa fa-search"></span></a></th>
 		   <th><a class="nseguimiento" data-talla="${object.ESTATURA}" data-Edad="${object.EDAD}" data-sexo="${object.SEXO}" data-Tipo=${object.TIPO} data-id="${object.ID}"> <span class="addcon fa fa-list"></span></a></th>
-			<th><a class="reporte" data-name="${object.Name}" data-talla="${object.ESTATURA}" data-Edad="${object.EDAD}" data-sexo="${object.SEXO}" data-Tipo=${object.TIPO} data-id="${object.ID}"> <span class=" fa fa-line-chart"></span></a></th>
+			
 			${object.TIPO == "Normal"? 
 				object.Normal > 1 ?
 					`<th><a class="reporte" data-name="${object.Name}" data-talla="${object.ESTATURA}" data-Edad="${object.EDAD}" data-sexo="${object.SEXO}" data-Tipo=${object.TIPO} data-id="${object.ID}"> <span class=" fa fa-line-chart"></span></a></th>`
