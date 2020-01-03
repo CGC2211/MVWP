@@ -151,6 +151,33 @@
         } 
     }
 
+    function somatipo($datos){
+        
+        $conn = mysqli_connect("localhost", "root", "", "pacientes") or die ("Error al conectar");
+        $sql = "SELECT i.ESTATURA,(c.Tricep + c.Subescapular + c.Suprae) as 'Sumaplieges',c.Humero,c.Femur,c.BicepRelax,c.Peso,c.Tricep,c.Subescapular,c.Suprae,c.FechaConsulta FROM infobasica i, consultadeportista c WHERE i.ID = c.IDP and i.ID = $datos and c.IDP = $datos order by c.FechaConsulta DESC LIMIT 1";
+        
+        if (mysqli_query($conn, $sql)) {
+                    //$sql = "";
+                    $result = $conn->query($sql);
+                    if ($result->num_rows > 0) {
+                        // output data of each row
+                        while($row = $result->fetch_assoc()) {
+                            $new_array[] = $row;
+                            
+                        }
+                        //echo $new_array;
+                        print json_encode($new_array);
+                    } 
+        
+                       //echo "<script>alert('Usuario Guardado exitosamente');</script>";
+                    //header('location: index2.php');
+              
+        } else {
+              echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+        } 
+   
+    }
+
     if (isset($_POST['callFunc1'])) {
         echo func1($_POST['callFunc1']);
     }
@@ -173,6 +200,10 @@
 
     if (isset($_POST['calllastconsult'])) {
         echo lastconsult($_POST['calllastconsult']);
+    }
+
+    if (isset($_POST['callsomatipo'])) {
+        echo grafresult($_POST['callsomatipo']);
     }
 
 ?>

@@ -104,8 +104,12 @@ function validate(){
 					});
 			break;
 			case 'Deportista':
-				$('.element-deportista input').each(function(index){
+				$('.element-deportista input.notempty').each(function(index){
 					$(this).val() == '0' || $(this).val() == '' ? $(this).addClass('errorclass') : $(this).removeClass('errorclass');
+				});
+
+				$('.element-deportista input:not(.notempty)').each(function(index){
+					$(this).val() < '0' || $(this).val() == '' ? $(this).addClass('errorclass') : $(this).removeClass('errorclass');
 				});
 				
 		}
@@ -593,6 +597,18 @@ function resultados(id){
 							console.log(err);
 						}
 					});
+
+	$.ajax({
+					type:"POST",
+					url:'Consult.php',
+					data:({ "callsomatipo": id}),
+					dataType:"json",
+						success: function(data){
+							somatipo(data);
+						},error: function(err){
+							console.log(err);
+						}
+					});				
 	
 
 	
@@ -765,6 +781,10 @@ function Graficar(data){
 			
 		}
 	});
+
+}
+
+function somatipo(data){
 
 }
 
