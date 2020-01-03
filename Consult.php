@@ -203,7 +203,7 @@
     }
 
     if (isset($_POST['callsomatipo'])) {
-        echo grafresult($_POST['callsomatipo']);
+        echo somatipo($_POST['callsomatipo']);
     }
 
 ?>

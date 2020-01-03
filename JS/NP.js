@@ -785,7 +785,151 @@ function Graficar(data){
 }
 
 function somatipo(data){
+	console.log(data);
+	let x = parseFloat(data[0].Sumaplieges) + (170.18/ parseFloat(data[0].ESTATURA));
+	let Endomorfo = -0.7182 + 0.1451 * x - (0.00068*(Math.pow(x,2))) + (0.0000014* (Math.pow(x,3)) );
+	let Mesomorfo = ((0.858 * parseFloat(data[0].Humero)) + (0.601 * parseFloat(data[0].Femur)) + (0.188 * parseFloat(data[0].BicepRelax))) - (parseFloat(data[0].ESTATURA) * 0.131) + 4.5;
+	let IP = parseFloat(data[0].ESTATURA) / (Math.pow(parseFloat(data[0].Peso),1/3));
+	let Ectomorfo = 0;
+	
 
+	
+
+	if (IP >= 40.75)
+		{
+			Ectomorfo = (0.732 * IP) - 28.58;
+		}
+	if (IP > 38.25 || IP < 40.75)
+		{
+			Ectomorfo = (0.732 * IP) - 28.58;
+		}
+	if (IP <= 38.25)
+		{
+			Ectomorfo = 0.1;
+		}
+	let ejex = Ectomorfo - Endomorfo;
+	let ejey = 2*(Mesomorfo-Ectomorfo-Endomorfo);
+	console.log("IP es " + IP);
+	console.log("Endomorfo es " + Endomorfo);
+	console.log("Mesomorfo es " + Mesomorfo);
+	console.log("Ectomorfo es " + Ectomorfo);
+	console.log("EjeX es " + ejex);
+	console.log("EjeY es " + ejey);
+
+	const datos =[];
+	datos.push(
+		[0, 12],
+		[-8, -8],
+        [8, -8],
+        [ ejex, ejey]);
+		
+	const datoscurva=[
+		{x: 0 ,y: -7},
+		{x: -5.8 ,y: -6},
+		{x: -5, y: 2},
+		{x: -4, y: 5},
+		{x: -3 ,y: 8},
+		{x:-2, y: 10},
+		{x:-1, y:11},
+		{x: 0 ,y: 12},
+		{x:1,y:11},
+		{x:2, y: 10},
+		{x: 3 ,y: 8},
+		{x: 4, y: 5},
+		{x: 5, y: 2},
+		{x: 5.8 ,y: -6},
+		{x: 0 ,y: -7}
+	];
+	
+		
+	
+
+console.log(datos);
+	/*
+	ESTATURA: "177"
+Sumaplieges: "42"
+Humero: "14"
+Femur: "14"
+BicepRelax: "14"
+Peso: "75"
+Tricep: "14"
+Subescapular: "14"
+Suprae: "14"
+FechaConsulta: "2019-11-28"
+
+	*/
+
+	 $('#graficas').css("display","flex");
+	 var ctxP = document.getElementById("somatochart").getContext('2d'); 
+	            	  	myPieChart = new Chart(ctxP, {
+							type: 'scatter',
+							data: {
+								datasets: [{
+									label: 'Scatter Dataset',
+									data:[
+									{
+										x: -8, 
+										y: -8
+									},
+									{
+										x:0,
+										y:12
+									},
+									
+									{
+										x: 8,
+										y: -8
+									},
+									{
+										x: -8, 
+										y: -8
+									}
+									],
+									borderColor: 'blue',
+									tension:0,
+									showLine: true,
+								}, {
+									type: 'line',
+									label: 'polar Dataset',
+									data: [{ 
+										x: ejex,
+										y: ejey
+									}], 
+									pointBorderColor: "#0081AA",
+									fillColor: '#ffff00',
+									// Changes this dataset to become a line
+									
+								}]
+							},
+							options: 
+							{
+								fillColor: "#0081AA",
+								backgroundColor	: "#28AD7E",
+								legend: {
+									labels:{
+										defaultFontSize: 18
+									}
+								},
+								scales: {
+									yAxes: [{
+										ticks: {
+											autoSkip: false,
+											max: 15,
+											min: -10,
+											stepSize:1
+										}
+									}],
+									 xAxes: [{
+										ticks: {
+											autoSkip: false,
+											max: 10,
+											min: -10,
+											stepSize:1
+										}
+									}]
+								}
+					      	}
+						});
 }
 
 $('body').on('click', 'input.segbtn', function() {
