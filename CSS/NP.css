@@ -562,10 +562,6 @@ nav{
   height: 300px;
 }
 
-#somatotipo{
-  width: 400px !important;
-  height: 400px !important;
-}
 
 .consulta{
   display: flex;
@@ -586,7 +582,6 @@ nav{
 .ultimaconsulta{
   align-self: center;
 }
-
 
 
 /*.consulta{

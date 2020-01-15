@@ -135,6 +135,13 @@
   background: lightgray;
 }
 
+#somatochart{
+	background-image: url(logos/somatocarta.png) !important;
+	background-size: 324px 324px !important;
+	background-attachment: fixed !important;
+	background-position: 49.2% 181% !important;
+}
+
 /*@media (max-width: 767px) {
 	#capturecam{
 		display: none !important;
