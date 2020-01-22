@@ -328,6 +328,7 @@ $("#find").click( function(){
 });
 
 function apendresults(data){
+	cleangraf();
 	if(data.length > 0){
 		$.each(data, function(index, object) {
                       
@@ -338,20 +339,7 @@ function apendresults(data){
 		   <td>${object.EDAD}</td>
 		   <th><a class="consultas" data-name="${object.Name}"  data-id="${object.ID}" data-Tipo=${object.TIPO} data-talla="${object.ESTATURA}" data-Edad="${object.EDAD}" data-sexo="${object.SEXO}" ><span class="fa fa-search"></span></a></th>
 		   <th><a class="nseguimiento" data-talla="${object.ESTATURA}" data-Edad="${object.EDAD}" data-sexo="${object.SEXO}" data-Tipo=${object.TIPO} data-id="${object.ID}"> <span class="addcon fa fa-list"></span></a></th>
-			
-			${object.TIPO == "Normal"? 
-				object.Normal > 1 ?
-					`<th><a class="reporte" data-name="${object.Name}" data-talla="${object.ESTATURA}" data-Edad="${object.EDAD}" data-sexo="${object.SEXO}" data-Tipo=${object.TIPO} data-id="${object.ID}"> <span class=" fa fa-line-chart"></span></a></th>`
-				:
-					`<th><a> <span class=" fa fa-ban"></span></a></th>`
-			:
-
-				object.Deportista > 1 ?
-					`<th><a class="reporte" data-name="${object.Name}" data-talla="${object.ESTATURA}" data-Edad="${object.EDAD}" data-sexo="${object.SEXO}" data-Tipo=${object.TIPO} data-id="${object.ID}"> <span class=" fa fa-line-chart"></span></a></th>`
-				:
-					`<th><a> <span class=" fa fa-ban"></span></a></th>`
-			}
-		   
+			<th><a class="reporte" data-name="${object.Name}" data-talla="${object.ESTATURA}" data-Edad="${object.EDAD}" data-sexo="${object.SEXO}" data-Normal="${object.Normal}" data-Deportista="${object.Deportista}"  data-Tipo=${object.TIPO} data-id="${object.ID}"> <span class=" fa fa-line-chart"></span></a></th>
 		   </tr>
 		   `
 		   );
@@ -377,7 +365,7 @@ $(document).on('click', '.reporte', function () {
 	 $('.spedad').html("Edad: " + $(this).attr('data-Edad'));
 	 $('.spestatura').html("Estatura: " + $(this).attr('data-talla'));
 
-	resultados($(this).attr('data-id'));
+	resultados($(this).attr('data-id') ,$(this).attr('data-tipo'),$(this).attr('data-Normal'),$(this).attr('data-Deportista'));
    $('.consulta').css('display', 'flex');
    $('#table-graphics').css('display', 'flex');
    $('.datos-paciente').css('display', 'flex');
@@ -542,7 +530,7 @@ $('body').on('click', 'input.depgraf', function() {
    //$(this).parent().parent().parent().find('ul').slideToggle();
 });
 
-function resultados(id){
+function resultados(id, tipo,normal,deportista){
 	
 
 	$('.consulta').empty();
@@ -586,7 +574,10 @@ function resultados(id){
 
 	});
 
-	$.ajax({
+	switch(tipo){
+		case 'Normal':
+				if(normal>1){
+					$.ajax({
 					type:"POST",
 					url:'Consult.php',
 					data:({ "callgraf": id}),
@@ -598,7 +589,7 @@ function resultados(id){
 						}
 					});
 
-	$.ajax({
+					$.ajax({
 					type:"POST",
 					url:'Consult.php',
 					data:({ "callsomatipo": id}),
@@ -608,7 +599,74 @@ function resultados(id){
 						},error: function(err){
 							console.log(err);
 						}
-					});				
+					});	
+				}else{
+					$.ajax({
+					type:"POST",
+					url:'Consult.php',
+					data:({ "callsomatipo": id}),
+					dataType:"json",
+						success: function(data){
+							somatipo(data);
+						},error: function(err){
+							console.log(err);
+						}
+					});	
+				}
+				
+				
+				
+
+		break;
+		case 'Deportista':
+				if(deportista>1){
+					$.ajax({
+						type:"POST",
+						url:'Consult.php',
+						data:({ "callgraf": id}),
+						dataType:"json",
+							success: function(data){
+								Graficar(data);
+							},error: function(err){
+								console.log(err);
+							}
+						});
+						
+						$.ajax({
+						type:"POST",
+						url:'Consult.php',
+						data:({ "callsomatipo": id}),
+						dataType:"json",
+							success: function(data){
+								somatipo(data);
+							},error: function(err){
+								console.log(err);
+							}
+						});	
+				}
+				
+				else{
+					$.ajax({
+						type:"POST",
+						url:'Consult.php',
+						data:({ "callsomatipo": id}),
+						dataType:"json",
+							success: function(data){
+								somatipo(data);
+							},error: function(err){
+								console.log(err);
+							}
+						});	
+				}
+				
+		break;
+
+	}
+
+
+	
+
+				
 	
 
 	
@@ -1159,4 +1217,19 @@ function generarpdf(){
 	imgData = somatochart.toDataURL("image/jpg",1.0);
     doc.addImage(imgData, 'JPEG', 0, 135);
 	doc.save('paciente'+date+ '.pdf');
+}
+
+
+function cleangraf(){
+	$('#graficas').css("display","none");
+	$('.datos-paciente').css("display","none");
+	$('.consulta').css("display","none");
+	$('#pesochart').remove(); // this is my <canvas> element
+	$('#pesochartdiv').append('<canvas id="pesochart" width="200px" height="200px"></canvas>');
+	$('#sirichart').remove(); // this is my <canvas> element
+	$('#sirichartdiv').append('<canvas id="sirichart" width="200px" height="200px"></canvas>');
+	$('#brozekchart').remove(); // this is my <canvas> element
+	$('#brozekchartdiv').append('<canvas id="brozekchart" width="200px" height="200px"></canvas>');
+	$('#rosemmchart').remove(); // this is my <canvas> element
+	$('#rosemmchartdiv').append('<canvas id="rosemmchart" width="200px" height="200px"></canvas>');
 }
