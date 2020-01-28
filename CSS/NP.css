@@ -18,7 +18,7 @@ nav{
 .nav-links{
   display: flex;
   list-style: none;
-  width: 50%;
+  width: 95%;
   height: 100%;
   justify-content: space-around;
   align-items: center;
@@ -29,6 +29,10 @@ nav{
   color: white;
   text-decoration: none;
   font-size: 18px;
+}
+
+.nav-links li:hover{
+  cursor: pointer;
 }
 
 @media screen and (max-width: 768px){
@@ -53,6 +57,22 @@ nav{
       z-index: 2;
   }
 
+  .grey{
+
+    background-color: #7c8d91;
+    -webkit-transition: background-color 10ms linear;
+    -ms-transition: background-color 10ms linear;
+    transition: background-color 10ms linear;
+
+  }
+
+  .blue{
+    background-color: #2D4996;
+    -webkit-transition: background-color 10ms linear;
+    -ms-transition: background-color 10ms linear;
+    transition: background-color 10ms linear;
+  }
+/*
  .nav-links{
      position: fixed;
 
@@ -70,7 +90,7 @@ nav{
   clip-path: circle(1200px at 90% -10%);
   -webkit-clip-path: circle(1200px at 90% -10%);
   pointer-events: all;
- }
+ }*/
 
  .landing{
      flex-direction: column;
@@ -98,6 +118,7 @@ nav{
 
  li.fade{
      opacity: 1;
+     margin: 30px;
  }
 
 }
@@ -563,13 +584,14 @@ nav{
 }
 
 
-.consulta{
-  display: flex;
+#consulta{
   flex-wrap: wrap;
-  margin-top: 15px;
+  flex-direction: column;
+  width: 300px;
+  height: 170px;
 }
 
-.consulta>*{
+#consulta>*{
   flex: 1 1 20%;
 }
 
@@ -583,6 +605,32 @@ nav{
   align-self: center;
 }
 
+
+.row {
+  font-size: medium;
+  text-align: -webkit-center;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100% !important;
+}
+
+.column {
+  overflow-wrap: break-word;
+  width: 150px;
+  border: 1px solid #0081AA;
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  flex: 1;
+}
+
+.row:nth-child(odd){
+  background:#caf2ff6b ;
+}
+.row:nth-child(even){
+  background:#88888833 ;
+}
 
 /*.consulta{
   display: flex;

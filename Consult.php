@@ -151,6 +151,26 @@
         } 
     }
 
+    function lastconsultN($data){
+        $conn = mysqli_connect("localhost", "root", "", "pacientes") or die ("Error al conectar");
+        $sql = "SELECT * FROM consultanormal c WHERE  c.IDP = '$data' order by c.FechaConsulta DESC LIMIT 1";
+        
+        if (mysqli_query($conn, $sql)) {
+                    $result = $conn->query($sql);
+                    if ($result->num_rows > 0) {
+                        while($row = $result->fetch_assoc()) {
+                            $new_array[] = $row;
+                            
+                        }
+                        print json_encode($new_array);
+                    } 
+              
+        } else {
+              echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+        } 
+    }
+
+
     function somatipo($datos){
         
         $conn = mysqli_connect("localhost", "root", "", "pacientes") or die ("Error al conectar");
@@ -200,6 +220,10 @@
 
     if (isset($_POST['calllastconsult'])) {
         echo lastconsult($_POST['calllastconsult']);
+    }
+
+    if (isset($_POST['calllastconsultn'])) {
+        echo lastconsultn($_POST['calllastconsultn']);
     }
 
     if (isset($_POST['callsomatipo'])) {

@@ -284,9 +284,13 @@ function clean(){
 	});
 }
 
+
+
+
+
 $(".optional").click(function(){
 	let dv = $(this).attr("data-value");
-
+	var state = true;
 	switch(dv){
 		case "NP":
 			hidemenu();
@@ -295,13 +299,18 @@ $(".optional").click(function(){
 			$(".datos-paciente").css("display","none");
 			$('.consulta').css("display","none");
 			$('#table-graphics').css("display","none");
+			$( "#navigation" ).css('transition','background-color 0.5s linear');
+			$( "#navigation" ).css('background-color',"#7c8d91" );
 		break;
 		case "SG":
 			hidemenu();
 			$(".newpa").css("display","none");
 			$(".Seguimiento").css("display","flex");
+			$( "#navigation" ).css('transition','background-color 0.5s linear');
+			$( "#navigation" ).css('background-color','#2D4996');
 		default:
 			break;
+		state = !state;
 	}
 });
 
@@ -360,12 +369,12 @@ $(document).on('click', '.consultas', function () {
 
 $(document).on('click', '.reporte', function () {
 
-	
-	 $('.spname').html("Nombre: " + $(this).attr('data-name'));
-	 $('.spedad').html("Edad: " + $(this).attr('data-Edad'));
-	 $('.spestatura').html("Estatura: " + $(this).attr('data-talla'));
+	 $('#pdf').attr('data-tipo',$(this).attr('data-Tipo'));
+	 $('.spname').html("<label style='font-weight: bold;'>Nombre:</label> " + $(this).attr('data-name'));
+	 $('.spedad').html("<label style='font-weight: bold;'>Edad:</label> " + $(this).attr('data-Edad'));
+	 $('.spestatura').html("<label style='font-weight: bold;'>Estatura:</label> " + $(this).attr('data-talla'));
 
-	resultados($(this).attr('data-id') ,$(this).attr('data-tipo'),$(this).attr('data-Normal'),$(this).attr('data-Deportista'));
+	resultados($(this).attr('data-id') ,$(this).attr('data-Tipo'),$(this).attr('data-Normal'),$(this).attr('data-Deportista'));
    $('.consulta').css('display', 'flex');
    $('#table-graphics').css('display', 'flex');
    $('.datos-paciente').css('display', 'flex');
@@ -532,50 +541,38 @@ $('body').on('click', 'input.depgraf', function() {
 
 function resultados(id, tipo,normal,deportista){
 	
-
-	$('.consulta').empty();
-	$.ajax({
-		type:"POST",
-		url:'Consult.php',
-		data:({ "calllastconsult": id}),
-		dataType:"json",
-			success: function(data){
-				$.each(data, function(index, object){
-					$('.consulta').append(
-							`
-							<div>Peso: ${object.Peso}</div>
-							<div>Bicep: ${object.Bicep}</div>
-							<div>Tricep: ${object.Tricep}</div>
-							<div>Subescapular: ${object.Subescapular}</div>
-							<div>Cresta iliaca: ${object.Crestai}</div>
-							<div>Supra-espinoso: ${object.Suprae}</div>
-							<div>Abdominal: ${object.Abdominal}</div>
-							<div>Muslo Medio: ${object.MusloMedio}</div>
-							<div>Pantorrilla: ${object.Pantorrilla}</div>
-							<div>Bicep Relax: ${object.BicepRelax}</div>
-							<div>Bicep Flex: ${object.BicepFlex}</div>
-							<div>Cintura Minima: ${object.CinMin}</div>
-							<div>Cadera Maxima: ${object.CadMax}</div>
-							<div>Pantorrilla Maxima: ${object.PantMax}</div>
-							<div>Humero: ${object.Humero}</div>
-							<div>Femur: ${object.Femur}</div>
-							<div>VO2Max: ${object.VO2Max}</div>
-							<div>Umbral: ${object.Umbral}</div>
-							<div>1 RM Bench: ${object.RMBench}</div>
-							<div>1 RM Squat: ${object.RMSquat}</div>							
-							`
-						);	
-				})
-				
-					
-			},error: function(err){
-				console.log(err);
-			  }
-
-	});
-
+	$('#consulta').empty();
 	switch(tipo){
 		case 'Normal':
+				$.ajax({
+					type:"POST",
+					url:'Consult.php',
+					data:({ "calllastconsultn": id}),
+					dataType:"json",
+						success: function(data){
+							console.log(data);
+							$.each(data, function(index, object){
+								$('#consulta').append(
+										`
+										<div class="row" ><div class="column">Peso</div><div class="column">${object.Peso}</div></div>
+										<div class="row"><div class="column">Circunferencia Cintura</div><div class="column">${object.CircCint}</div></div>
+										<div class="row"><div class="column">Circunferencia Cadera</div><div class="column">${object.CircCad}</div></div>
+										<div class="row"><div class="column">Pliegue Bicep</div><div class="column"> ${object.PlieBic}</div></div>
+										<div class="row"><div class="column">Pliegue Tricep</div><div class="column"> ${object.PlieTric}</div></div>
+										<div class="row"><div class="column">% Grasa</div><div class="column"> ${object.PorGra}</div></div>
+							
+										`
+									);	
+							});
+							 $('.ultimaconsulta').html("<label style='font-weight: bold;'>Fecha:</label> " + data[0].FechaConsulta);
+							
+								
+						},error: function(err){
+							console.log(err);
+						}
+
+				});
+
 				if(normal>1){
 					$.ajax({
 					type:"POST",
@@ -587,38 +584,49 @@ function resultados(id, tipo,normal,deportista){
 						},error: function(err){
 							console.log(err);
 						}
-					});
-
-					$.ajax({
-					type:"POST",
-					url:'Consult.php',
-					data:({ "callsomatipo": id}),
-					dataType:"json",
-						success: function(data){
-							somatipo(data);
-						},error: function(err){
-							console.log(err);
-						}
-					});	
-				}else{
-					$.ajax({
-					type:"POST",
-					url:'Consult.php',
-					data:({ "callsomatipo": id}),
-					dataType:"json",
-						success: function(data){
-							somatipo(data);
-						},error: function(err){
-							console.log(err);
-						}
 					});	
 				}
-				
-				
-				
-
 		break;
 		case 'Deportista':
+				$.ajax({
+					type:"POST",
+					url:'Consult.php',
+					data:({ "calllastconsult": id}),
+					dataType:"json",
+						success: function(data){
+							$.each(data, function(index, object){
+								$('#consulta').append(
+										`
+										<div>Peso: ${object.Peso}</div>
+										<div>Bicep: ${object.Bicep}</div>
+										<div>Tricep: ${object.Tricep}</div>
+										<div>Subescapular: ${object.Subescapular}</div>
+										<div>Cresta iliaca: ${object.Crestai}</div>
+										<div>Supra-espinoso: ${object.Suprae}</div>
+										<div>Abdominal: ${object.Abdominal}</div>
+										<div>Muslo Medio: ${object.MusloMedio}</div>
+										<div>Pantorrilla: ${object.Pantorrilla}</div>
+										<div>Bicep Relax: ${object.BicepRelax}</div>
+										<div>Bicep Flex: ${object.BicepFlex}</div>
+										<div>Cintura Minima: ${object.CinMin}</div>
+										<div>Cadera Maxima: ${object.CadMax}</div>
+										<div>Pantorrilla Maxima: ${object.PantMax}</div>
+										<div>Humero: ${object.Humero}</div>
+										<div>Femur: ${object.Femur}</div>
+										<div>VO2Max: ${object.VO2Max}</div>
+										<div>Umbral: ${object.Umbral}</div>
+										<div>1 RM Bench: ${object.RMBench}</div>
+										<div>1 RM Squat: ${object.RMSquat}</div>							
+										`
+									);	
+							})
+							
+								
+						},error: function(err){
+							console.log(err);
+						}
+
+				});
 				if(deportista>1){
 					$.ajax({
 						type:"POST",
@@ -989,6 +997,7 @@ FechaConsulta: "2019-11-28"
 }
 
 $('body').on('click', 'input.segbtn', function() {
+
 	 validates();
 		if ($('.errorclass').length == 0){
 			insertseguimiento($('#TIPOP').html());
@@ -1002,6 +1011,9 @@ $('body').on('click', 'input.segbtn', function() {
 			});
 		}
 	});
+
+
+
 
 
 
@@ -1186,24 +1198,115 @@ function insertseguimiento(tipo){
 		break;
 	}
 }
+
+$('#pdf').css("pointer-events", "none");
+$('#pdf').css("display", "none");
+
+$('#observaciones').keyup(function(){
+	if($(this).val().length !=0){
+		$('#pdf').css("pointer-events", "auto");
+		$('#pdf').css("display", "block");
+	}
+	else{
+		$('#pdf').css("pointer-events", "none");
+		$('#pdf').css("display", "none");
+	}     
 });
 
-function generarpdf(){
+$('body').on('click', '#pdf',
+function (){
 	var pesochart = document.getElementById('pesochart');
 	var sirichart = document.getElementById('sirichart');
 	var brozekchart = document.getElementById('brozekchart');
 	var rosemmchart = document.getElementById('rosemmchart');
 	var somatochart = document.getElementById('somatochart');
-	
+	var tipo = $('#pdf').attr('data-tipo');
 	var doc = new jsPDF('vertical','mm','letter');
-	/*let texto = "Resultados de " + $('.spname').html();
-	doc.text(15,10,texto);*/
-	doc.fromHTML($('.datos-paciente').html(),15,15);
-	doc.fromHTML($('.consulta').html(),15,45);
 	var today = new Date();
 	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()+'-'+today.getSeconds();
-	var imgData = pesochart.toDataURL("image/PNG", 1.0);
-    
+	
+
+	switch(tipo){
+		case 'Normal':
+
+			var img = new Image();
+			img.src= 'logos/logo.PNG';
+			doc.addImage(img, 'JPEG', 10, 0, 50, 30);
+			doc.fromHTML($('.spname').html(),10,40);
+			doc.fromHTML($('.spedad').html(),10,45);
+			doc.fromHTML($('.spestatura').html(),160,40);
+			doc.fromHTML($('.ultimaconsulta').html(),160,45);
+			doc.autoTable({
+				theme: 'grid',
+				columnStyles: { 
+								0: { halign: 'center'},
+								1: { halign: 'center' },
+								 
+							}, // Cells in first column centered and green
+				tableWidth: 'wrap',
+				margin: { top: 55,left:85 },
+				tableLineColor: [0,0,0],
+				body: [
+					[$("#consulta div.row:nth-child(1) div.column:nth-child(1)").text(), $("#consulta div.row:nth-child(1) div.column:nth-child(2)").text()],
+					[$("#consulta div.row:nth-child(2) div.column:nth-child(1)").text(), $("#consulta div.row:nth-child(2) div.column:nth-child(2)").text()],
+					[$("#consulta div.row:nth-child(3) div.column:nth-child(1)").text(), $("#consulta div.row:nth-child(3) div.column:nth-child(2)").text()],
+					[$("#consulta div.row:nth-child(4) div.column:nth-child(1)").text(), $("#consulta div.row:nth-child(4) div.column:nth-child(2)").text()],
+					[$("#consulta div.row:nth-child(5) div.column:nth-child(1)").text(), $("#consulta div.row:nth-child(5) div.column:nth-child(2)").text()],
+					[$("#consulta div.row:nth-child(6) div.column:nth-child(1)").text(), $("#consulta div.row:nth-child(6) div.column:nth-child(2)").text()]
+				],
+				didParseCell: function (data) {
+						var rows = data.table.body;
+						
+							if (data.row.index  % 2 == 1) {
+							data.cell.styles.fillColor = [202,242,255];
+						}else{
+							data.cell.styles.fillColor= [255,255,255]
+						}
+						
+						
+					}
+				})
+			doc.setFontSize(12);
+			doc.text(10,125,$('#observaciones').val());
+			//doc.fromHTML($('#consulta ').html(),50,85);
+			doc.setFontSize(10);
+			doc.setTextColor(155,155,155);
+			doc.text(10, 245, `M. en C. Manuel Alejandro Vázquez Bautista
+Ced. Prof. 057902
+Tel: (662)5 010757 o (662)2 258708
+Héroes de Nacozari #72B, col. Modelo
+Hermosillo, Sonora, México. 
+Facebook.com/nutrackmexico `);
+			img.src = 'logos/Barras.PNG';
+			doc.addImage(img, 'JPEG', 170, 185, 50, 100);
+			doc.save('paciente'+date+ '.pdf');
+		break;
+		case 'Deportista':
+			doc.fromHTML($('.datos-paciente').html(),15,15);
+			doc.fromHTML($('.consulta').html(),15,45);
+			var imgData = pesochart.toDataURL("image/PNG", 1.0);   
+			doc.addImage(imgData, 'PNG', 0, 135);
+			imgData = sirichart.toDataURL("image/PNG",1.0);
+			doc.addImage(imgData, 'JPEG', 105, 135);
+			doc.addPage();
+			imgData = brozekchart.toDataURL("image/PNG",1.0);
+			doc.addImage(imgData, 'JPEG', 0, 0);
+			imgData = rosemmchart.toDataURL("image/PNG",1.0);
+			doc.addImage(imgData, 'JPEG', 105, 0);
+			imgData = 'data:image/png;base64,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'
+			doc.addImage(imgData, 'PNG', .2, 140,103,109);
+			imgData = somatochart.toDataURL("image/jpg",1.0);
+			doc.addImage(imgData, 'JPEG', 0, 135);
+			doc.save('paciente'+date+ '.pdf');
+		break;
+	}
+
+
+
+	/*
+	doc.fromHTML($('.datos-paciente').html(),15,15);
+	doc.fromHTML($('.consulta').html(),15,45);
+	var imgData = pesochart.toDataURL("image/PNG", 1.0);   
 	doc.addImage(imgData, 'PNG', 0, 135);
 	imgData = sirichart.toDataURL("image/PNG",1.0);
 	doc.addImage(imgData, 'JPEG', 105, 135);
@@ -1216,8 +1319,12 @@ function generarpdf(){
     doc.addImage(imgData, 'PNG', .2, 140,103,109);
 	imgData = somatochart.toDataURL("image/jpg",1.0);
     doc.addImage(imgData, 'JPEG', 0, 135);
-	doc.save('paciente'+date+ '.pdf');
-}
+	doc.save('paciente'+date+ '.pdf');*/
+});
+
+});
+
+
 
 
 function cleangraf(){
