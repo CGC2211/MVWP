@@ -197,25 +197,28 @@
 		<div id="consulta"></div>
 		<div id="table-graphics" style="display: none;">
 			<div id="graficas" style="display: none; flex-direction: row; flex-wrap: wrap;">
-				<div id="pesochartdiv">
+				<div id="pesochartdiv" style="display: none;">
 					<canvas height="200px" id="pesochart" width="200px"></canvas>
 				</div>
-				<div id="sirichartdiv">
+				<div id="Grasachartdiv" style="display: none;">
+					<canvas height="200px" id="Grasachart" width="200px"></canvas>
+				</div>
+				<div id="sirichartdiv" style="display: none;">
 					<canvas height="200px" id="sirichart" width="200px"></canvas>
 				</div>
-				<div id="brozekchartdiv">
+				<div id="brozekchartdiv" style="display: none;">
 					<canvas height="200px" id="brozekchart" width="200px"></canvas>
 				</div>
-				<div id="rosemmchartdiv">
+				<div id="rosemmchartdiv" style="display: none;">
 					<canvas height="200px" id="rosemmchart" width="200px"></canvas>
 				</div>
-				<div id="somatotipo">
+				<div id="somatotipo"style="display: none;">
 					<canvas height="400px" id="somatochart" width="400px"></canvas>
 				</div>
 			</div>
 			<div style="margin-top: 20px;text-align: center;">
 				<div>
-					<textarea id="observaciones" rows="30" cols="50" style="width: 300px;height: 250px;" placeholder="Escriba sus observaciones."></textarea>
+					<textarea id="observaciones" rows="30" cols="20" style="width: 300px;height: 250px;" placeholder="Escriba sus observaciones."></textarea>
 				</div>
 				<div>
 					<a data-tipo="" id="pdf"><span class="fa fa-file-pdf-o"></span> Generar PDF</a>

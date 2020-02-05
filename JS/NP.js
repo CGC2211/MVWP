@@ -5,6 +5,9 @@ const hamburger = document.querySelector('.hamburger');
 const navlinks = document.querySelector('.nav-links');
 const links = document.querySelectorAll('.nav-links li');
 var myPieChart;
+let deportistaArray = [];
+let ejex = 0;
+let ejey = 0;
 
 $(document).ready(function(){
 
@@ -297,7 +300,7 @@ $(".optional").click(function(){
 			$(".newpa").css("display","flex");
 			$(".Seguimiento").css("display","none");
 			$(".datos-paciente").css("display","none");
-			$('.consulta').css("display","none");
+			$('#consulta').css("display","none");
 			$('#table-graphics').css("display","none");
 			$( "#navigation" ).css('transition','background-color 0.5s linear');
 			$( "#navigation" ).css('background-color',"#7c8d91" );
@@ -375,7 +378,7 @@ $(document).on('click', '.reporte', function () {
 	 $('.spestatura').html("<label style='font-weight: bold;'>Estatura:</label> " + $(this).attr('data-talla'));
 
 	resultados($(this).attr('data-id') ,$(this).attr('data-Tipo'),$(this).attr('data-Normal'),$(this).attr('data-Deportista'));
-   $('.consulta').css('display', 'flex');
+   $('#consulta').css('display', 'flex');
    $('#table-graphics').css('display', 'flex');
    $('.datos-paciente').css('display', 'flex');
    $(".archive_month").empty();
@@ -438,7 +441,6 @@ function fillprevinfo(tipo , id, sexo,edad,estatura){
 				data:({ "callFuncNormales": id}),
 				dataType:"json",
 					success: function(data){
-						console.log(data);
 						$.each(data, function(index, object) {
                       
 							$('#tableseguimientonormal').append(
@@ -544,13 +546,13 @@ function resultados(id, tipo,normal,deportista){
 	$('#consulta').empty();
 	switch(tipo){
 		case 'Normal':
+			$('#consulta').css('heigth','200px');
 				$.ajax({
 					type:"POST",
 					url:'Consult.php',
 					data:({ "calllastconsultn": id}),
 					dataType:"json",
 						success: function(data){
-							console.log(data);
 							$.each(data, function(index, object){
 								$('#consulta').append(
 										`
@@ -577,10 +579,10 @@ function resultados(id, tipo,normal,deportista){
 					$.ajax({
 					type:"POST",
 					url:'Consult.php',
-					data:({ "callgraf": id}),
+					data:({ "callgrafn": id}),
 					dataType:"json",
 						success: function(data){
-							Graficar(data);
+							GraficarN(data);
 						},error: function(err){
 							console.log(err);
 						}
@@ -588,6 +590,7 @@ function resultados(id, tipo,normal,deportista){
 				}
 		break;
 		case 'Deportista':
+			$('#consulta').css('heigth','411px');
 				$.ajax({
 					type:"POST",
 					url:'Consult.php',
@@ -597,31 +600,42 @@ function resultados(id, tipo,normal,deportista){
 							$.each(data, function(index, object){
 								$('#consulta').append(
 										`
-										<div>Peso: ${object.Peso}</div>
-										<div>Bicep: ${object.Bicep}</div>
-										<div>Tricep: ${object.Tricep}</div>
-										<div>Subescapular: ${object.Subescapular}</div>
-										<div>Cresta iliaca: ${object.Crestai}</div>
-										<div>Supra-espinoso: ${object.Suprae}</div>
-										<div>Abdominal: ${object.Abdominal}</div>
-										<div>Muslo Medio: ${object.MusloMedio}</div>
-										<div>Pantorrilla: ${object.Pantorrilla}</div>
-										<div>Bicep Relax: ${object.BicepRelax}</div>
-										<div>Bicep Flex: ${object.BicepFlex}</div>
-										<div>Cintura Minima: ${object.CinMin}</div>
-										<div>Cadera Maxima: ${object.CadMax}</div>
-										<div>Pantorrilla Maxima: ${object.PantMax}</div>
-										<div>Humero: ${object.Humero}</div>
-										<div>Femur: ${object.Femur}</div>
-										<div>VO2Max: ${object.VO2Max}</div>
-										<div>Umbral: ${object.Umbral}</div>
-										<div>1 RM Bench: ${object.RMBench}</div>
-										<div>1 RM Squat: ${object.RMSquat}</div>							
+										<div class="row" ><div class="column">Peso:</div><div class="column"> ${object.Peso}</div></div>
+										<div class="row" ><div class="column">Bicep:</div><div class="column"> ${object.Bicep}</div></div>
+										<div class="row" ><div class="column">Tricep:</div><div class="column"> ${object.Tricep}</div></div>
+										<div class="row" ><div class="column">Subescapular:</div><div class="column"> ${object.Subescapular}</div></div>
+										<div class="row" ><div class="column">Cresta iliaca:</div><div class="column"> ${object.Crestai}</div></div>
+										<div class="row" ><div class="column">Supra-espinoso:</div><div class="column"> ${object.Suprae}</div></div>
+										<div class="row" ><div class="column">Abdominal:</div><div class="column"> ${object.Abdominal}</div></div>
+										<div class="row" ><div class="column">Muslo Medio:</div><div class="column"> ${object.MusloMedio}</div></div>
+										<div class="row" ><div class="column">Pantorrilla:</div><div class="column"> ${object.Pantorrilla}</div></div>
+										<div class="row" ><div class="column">Bicep Relax:</div><div class="column"> ${object.BicepRelax}</div></div>
+										<div class="row" ><div class="column">Bicep Flex:</div><div class="column"> ${object.BicepFlex}</div></div>
+										<div class="row" ><div class="column">Cintura Minima:</div><div class="column"> ${object.CinMin}</div></div>
+										<div class="row" ><div class="column">Cadera Maxima:</div><div class="column"> ${object.CadMax}</div></div>
+										<div class="row" ><div class="column">Pantorrilla Maxima:</div><div class="column"> ${object.PantMax}</div></div>
+										<div class="row" ><div class="column">Humero:</div><div class="column"> ${object.Humero}</div></div>
+										<div class="row" ><div class="column">Femur:</div><div class="column"> ${object.Femur}</div></div>
+										<div class="row" ><div class="column">VO2Max:</div><div class="column"> ${object.VO2Max}</div></div>
+										<div class="row" ><div class="column">Umbral:</div><div class="column"> ${object.Umbral}</div></div>
+										<div class="row" ><div class="column">1 RM Bench:</div><div class="column"> ${object.RMBench}</div></div>
+										<div class="row" ><div class="column">1 RM Squat:</div><div class="column"> ${object.RMSquat}</div></div>							
 										`
 									);	
-							})
+							});
+							 $('.ultimaconsulta').html("<label style='font-weight: bold;'>Fecha:</label> " + data[0].FechaConsulta);
 							
-								
+							deportistaArray.push(['Peso (Kg):',parseFloat(data[0].Peso).toFixed(4)]);
+							deportistaArray.push(['Siri (%)',parseFloat(data[0].sirig).toFixed(4)]);
+							deportistaArray.push(['Brozeck (%):',parseFloat(data[0].brozecg).toFixed(4)]);
+							deportistaArray.push(['MM (%):',parseFloat(data[0].rosep).toFixed(4)]);
+							deportistaArray.push(['Masa Ósea (KG):',parseFloat(data[0].Masao).toFixed(4)]);
+							deportistaArray.push(['Brozeck (Kg):',parseFloat(data[0].brozeck).toFixed(4)]);
+							deportistaArray.push(['Siri (KG):',parseFloat(data[0].sirik).toFixed(4)]);
+							deportistaArray.push(['VO2Max (ml/kg/min):',parseFloat(data[0].VO2Max).toFixed(4)]);
+							deportistaArray.push(['1 RM Bench (Kg):',parseFloat(data[0].RMBench).toFixed(4)]);
+							deportistaArray.push(['1 RM Squat (Kg):',parseFloat(data[0].RMSquat).toFixed(4)]);
+							
 						},error: function(err){
 							console.log(err);
 						}
@@ -671,13 +685,6 @@ function resultados(id, tipo,normal,deportista){
 
 	}
 
-
-	
-
-				
-	
-
-	
 }
 
 function Graficar(data){
@@ -696,10 +703,11 @@ function Graficar(data){
 		peso.push(data[i].Peso);
 		
 	 } 
-	 $('.ultimaconsulta').html("Fecha de la ultima consulta: " + dates[4]);
 	
-	 $('#graficas').css("display","flex");
-	 var ctxP = document.getElementById("pesochart").getContext('2d'); 
+	$('#graficas').css("display","flex");
+	$('#pesochartdiv').css("display","block");
+	$('#pesochartdiv').addClass('selected');
+	var ctxP = document.getElementById("pesochart").getContext('2d'); 
 	            	  	myPieChart = new Chart(ctxP, {
 				      	type: 'line',
 				      	data: {
@@ -737,8 +745,10 @@ function Graficar(data){
 									}]
 								}
 					      	}
-						});  
-	var ctxP = document.getElementById("sirichart").getContext('2d'); 
+						});
+	$('#sirichartdiv').css("display","block");
+	$('#sirichartdiv').addClass('selected');  
+	ctxP = document.getElementById("sirichart").getContext('2d'); 
 	myPieChart = new Chart(ctxP, {
 	type: 'line',
 	data: {
@@ -775,7 +785,9 @@ function Graficar(data){
 		}
 	});  
 
-	var ctxP = document.getElementById("rosemmchart").getContext('2d'); 
+	$('#rosemmchartdiv').css("display","block");
+	$('#rosemmchartdiv').addClass('selected'); 
+	ctxP = document.getElementById("rosemmchart").getContext('2d'); 
 	myPieChart = new Chart(ctxP, {
 	type: 'line',
 	data: {
@@ -811,7 +823,9 @@ function Graficar(data){
 		}
 	});
 
-	var ctxP = document.getElementById("brozekchart").getContext('2d'); 
+	$('#brozekchartdiv').css("display","block"); 
+	$('#brozekchartdiv').addClass('selected');
+	ctxP = document.getElementById("brozekchart").getContext('2d'); 
 	myPieChart = new Chart(ctxP, {
 	type: 'line',
 	data: {
@@ -850,8 +864,100 @@ function Graficar(data){
 
 }
 
-function somatipo(data){
+function GraficarN(data){
 	console.log(data);
+	let dates = [];
+	let peso = [];
+	let Grasa = [];
+
+
+	for(i = 0; i< data.length; i++ ){
+		dates.push(data[i].FechaConsulta);
+		Grasa.push(data[i].PorGra);
+		peso.push(data[i].Peso);
+	 }
+
+	  $('#graficas').css("display","flex");
+	  $('#pesochartdiv').css("display","block");
+	  $('#pesochartdiv').addClass('selected');
+	 var ctxP = document.getElementById("pesochart").getContext('2d'); 
+	            	  	myPieChart = new Chart(ctxP, {
+				      	type: 'line',
+				      	data: {
+					        datasets: [{
+								data: peso,
+								label: "Seguimiento de Peso "
+						        }],
+						        labels: dates
+					      	},
+					      	options: {
+								responsive: true,
+								fillColor: "#2427ff",
+								strokeColor: "#2427ff",
+								legend: {
+									labels:{
+										defaultFontSize: 18
+									}
+								},
+								scales: {
+									yAxes: [{
+										ticks: {
+											autoSkip: false,
+											maxTicksLimit: 5
+											
+										}
+									}],
+									 xAxes: [{
+										ticks: {
+											autoSkip: false,
+											maxRotation: 90,
+											minRotation: 90
+										}
+									}]
+								}
+					      	}
+						});  
+	$('#Grasachartdiv').css("display","block");
+	$('#Grasachartdiv').addClass('selected');				
+	ctxP = document.getElementById("Grasachart").getContext('2d'); 
+	myPieChart = new Chart(ctxP, {
+	type: 'line',
+	data: {
+		datasets: [{
+			data: Grasa,
+			fillColor: "#0099ff",
+			label: "Seguimiento de Porcentaje de Grasa"
+			}],
+			labels: dates
+		},
+		options: {
+			responsive: true,
+			legend: {
+				labels:{
+					defaultFontSize: 18
+				}
+			},
+			scales: {
+				yAxes: [{
+					ticks: {
+						autoSkip: true,
+						maxTicksLimit: 5,
+					}
+				}],
+				xAxes: [{
+					ticks: {
+						autoSkip: false,
+						maxRotation: 90,
+						minRotation: 90
+					}
+				}]
+			}
+			
+		}
+	});    
+}
+
+function somatipo(data){
 	let x = parseFloat(data[0].Sumaplieges) + (170.18/ parseFloat(data[0].ESTATURA));
 	let Endomorfo = -0.7182 + 0.1451 * x - (0.00068*(Math.pow(x,2))) + (0.0000014* (Math.pow(x,3)) );
 	let Mesomorfo = ((0.858 * parseFloat(data[0].Humero)) + (0.601 * parseFloat(data[0].Femur)) + (0.188 * parseFloat(data[0].BicepRelax))) - (parseFloat(data[0].ESTATURA) * 0.131) + 4.5;
@@ -873,14 +979,9 @@ function somatipo(data){
 		{
 			Ectomorfo = 0.1;
 		}
-	let ejex = Ectomorfo - Endomorfo;
-	let ejey = 2*(Mesomorfo-Ectomorfo-Endomorfo);
-	/*console.log("IP es " + IP);
-	console.log("Endomorfo es " + Endomorfo);
-	console.log("Mesomorfo es " + Mesomorfo);
-	console.log("Ectomorfo es " + Ectomorfo);
-	console.log("EjeX es " + ejex);
-	console.log("EjeY es " + ejey);*/
+	ejex = Ectomorfo - Endomorfo;
+	ejey = 2*(Mesomorfo-Ectomorfo-Endomorfo);
+	
 
 	const datos =[];
 	datos.push(
@@ -889,44 +990,18 @@ function somatipo(data){
         [8, -8],
         [ ejex, ejey]);
 		
-	const datoscurva=[
-		{x: 0 ,y: -7},
-		{x: -5.8 ,y: -6},
-		{x: -5, y: 2},
-		{x: -4, y: 5},
-		{x: -3 ,y: 8},
-		{x:-2, y: 10},
-		{x:-1, y:11},
-		{x: 0 ,y: 12},
-		{x:1,y:11},
-		{x:2, y: 10},
-		{x: 3 ,y: 8},
-		{x: 4, y: 5},
-		{x: 5, y: 2},
-		{x: 5.8 ,y: -6},
-		{x: 0 ,y: -7}
-	];
-	/*
-	ESTATURA: "177"
-Sumaplieges: "42"
-Humero: "14"
-Femur: "14"
-BicepRelax: "14"
-Peso: "75"
-Tricep: "14"
-Subescapular: "14"
-Suprae: "14"
-FechaConsulta: "2019-11-28"
+	
 
-	*/
-
-	 $('#graficas').css("display","flex");
-	 var ctxP = document.getElementById("somatochart").getContext('2d'); 
+	$('#graficas').css("display","flex");
+	$('#somatotipo').css("display","block");
+	$('#somatotipo').addClass('selected');
+	var ctxP = document.getElementById("somatochart").getContext('2d');
+	ctxP.height = 300;
 	            	  	myPieChart = new Chart(ctxP, {
 							type: 'scatter',
 							data: {
 								datasets: [{
-									label: 'Scatter Dataset',
+									label: 'Somatocarta',
 									data:[
 									{
 										x: -8, 
@@ -945,27 +1020,108 @@ FechaConsulta: "2019-11-28"
 										x: -8, 
 										y: -8
 									}
+									
 									],
 									borderColor: 'blue'
 									
 								}, {
 									type: 'line',
-									label: 'polar Dataset',
-									data: [{ 
-										x: ejex,
-										y: ejey
-									}], 
-									pointBorderColor: "#0081AA",
-									fillColor: '#ffff00',
+									
+									data: [
+									{ 
+										x: -5,
+										y: 5
+									},
+									{ 
+										x: 8,
+										y: -8
+									},
+									{ 
+										x: 8,
+										y: -8
+									},
+									{ 
+										x: -5,
+										y: 5
+									},
+									{ 
+										x: -9.5,
+										y: 9.5
+									}
+									
+
+									],
+										pointBorderColor: "#0081AA",
+										fillColor: '#ffff00',
+										fill: false,
+										lineTension: 0,
+									
+									
 									// Changes this dataset to become a line
 									
-								}]
+								},
+								{
+									type: 'line',
+									
+									data: [
+									{ 
+										x: 5,
+										y: 5
+									},
+									{ 
+										x: -8,
+										y: -8
+									},
+									{ 
+										x: -8,
+										y: -8
+									},
+									{ 
+										x: 5,
+										y: 5
+									},
+									{ 
+										x: 9.5,
+										y: 9.5
+									}
+									
+
+									],
+										pointBorderColor: "#0081AA",
+										fillColor: '#ffff00',
+										fill: false,
+										lineTension: 0,
+									
+									
+									// Changes this dataset to become a line
+									
+								},
+								{
+									type: 'line',
+									
+									data: [
+									{ 
+										x: ejex,
+										y: ejey
+									}
+									],
+										pointBorderColor: "#1aaa00",
+										fillColor: '#1aaa00',
+										pointStyle:'cross'
+									
+									
+									// Changes this dataset to become a line
+									
+								}
+								]
 							},
 							options: 
 							{
+								maintainAspectRatio: false,
 								fillColor: "#0081AA",
 								backgroundColor	: "#28AD7E",
 								legend: {
+									display: false,
 									labels:{
 										defaultFontSize: 18
 									}
@@ -974,9 +1130,10 @@ FechaConsulta: "2019-11-28"
 									yAxes: [{
 										ticks: {
 											autoSkip: false,
-											max: 15,
+											max: 16,
 											min: -10,
-											stepSize:1
+											stepSize:2,
+											display: false
 										}
 									}],
 									 xAxes: [{
@@ -984,13 +1141,15 @@ FechaConsulta: "2019-11-28"
 											autoSkip: false,
 											max: 10,
 											min: -10,
-											stepSize:1
+											stepSize:2,
+											display: false
+
 										}
 									}]
 								}
 					      	}
 						});
-	 document.getElementById("somatochart").style.backgroundImage = " url('logos/somatocarta.png')";
+	document.getElementById("somatochart").style.backgroundImage = " url('logos/Mesocarta1.png')";
     document.getElementById("somatochart").style.backgroundSize= "324px 324px";
     document.getElementById("somatochart").style.backgroundPosition= "9.2% -100%" ;
 
@@ -1216,6 +1375,7 @@ $('#observaciones').keyup(function(){
 $('body').on('click', '#pdf',
 function (){
 	var pesochart = document.getElementById('pesochart');
+	var Grasachart = document.getElementById('Grasachart');
 	var sirichart = document.getElementById('sirichart');
 	var brozekchart = document.getElementById('brozekchart');
 	var rosemmchart = document.getElementById('rosemmchart');
@@ -1232,6 +1392,7 @@ function (){
 			var img = new Image();
 			img.src= 'logos/logo.PNG';
 			doc.addImage(img, 'JPEG', 10, 0, 50, 30);
+			doc.setFont("courier");
 			doc.fromHTML($('.spname').html(),10,40);
 			doc.fromHTML($('.spedad').html(),10,45);
 			doc.fromHTML($('.spestatura').html(),160,40);
@@ -1253,7 +1414,7 @@ function (){
 					[$("#consulta div.row:nth-child(4) div.column:nth-child(1)").text(), $("#consulta div.row:nth-child(4) div.column:nth-child(2)").text()],
 					[$("#consulta div.row:nth-child(5) div.column:nth-child(1)").text(), $("#consulta div.row:nth-child(5) div.column:nth-child(2)").text()],
 					[$("#consulta div.row:nth-child(6) div.column:nth-child(1)").text(), $("#consulta div.row:nth-child(6) div.column:nth-child(2)").text()]
-				],
+				],styles: {font: "courier"},
 				didParseCell: function (data) {
 						var rows = data.table.body;
 						
@@ -1265,9 +1426,12 @@ function (){
 						
 						
 					}
-				})
+				});
 			doc.setFontSize(12);
-			doc.text(10,125,$('#observaciones').val());
+			img.src = 'logos/Barras.PNG';
+			doc.addImage(img, 'JPEG', 170, 185, 50, 100);
+			var splitTitle = doc.splitTextToSize($('#observaciones').val(), 180);
+			doc.text(10,100,splitTitle,{align:'left',width:100});
 			//doc.fromHTML($('#consulta ').html(),50,85);
 			doc.setFontSize(10);
 			doc.setTextColor(155,155,155);
@@ -1277,49 +1441,187 @@ Tel: (662)5 010757 o (662)2 258708
 Héroes de Nacozari #72B, col. Modelo
 Hermosillo, Sonora, México. 
 Facebook.com/nutrackmexico `);
-			img.src = 'logos/Barras.PNG';
-			doc.addImage(img, 'JPEG', 170, 185, 50, 100);
+			if($('.selected').length > 0){
+				doc.addPage();
+				img.src= 'logos/logo.PNG';
+				doc.addImage(img, 'JPEG', 10, 0, 50, 30);
+				var imgData = pesochart.toDataURL("image/PNG", 1.0);   
+				doc.addImage(imgData, 'PNG', 10, 45);
+				imgData = Grasachart.toDataURL("image/PNG",1.0);
+				doc.addImage(imgData, 'JPEG', 105, 45);
+				doc.setFontSize(10);
+				doc.setTextColor(155,155,155);
+				doc.text(10, 245, `M. en C. Manuel Alejandro Vázquez Bautista
+Ced. Prof. 057902
+Tel: (662)5 010757 o (662)2 258708
+Héroes de Nacozari #72B, col. Modelo
+Hermosillo, Sonora, México. 
+Facebook.com/nutrackmexico `);
+				img.src = 'logos/Barras.PNG';
+				doc.addImage(img, 'JPEG', 170, 185, 50, 100);
+
+			}
+
 			doc.save('paciente'+date+ '.pdf');
 		break;
 		case 'Deportista':
-			doc.fromHTML($('.datos-paciente').html(),15,15);
-			doc.fromHTML($('.consulta').html(),15,45);
-			var imgData = pesochart.toDataURL("image/PNG", 1.0);   
-			doc.addImage(imgData, 'PNG', 0, 135);
-			imgData = sirichart.toDataURL("image/PNG",1.0);
-			doc.addImage(imgData, 'JPEG', 105, 135);
-			doc.addPage();
-			imgData = brozekchart.toDataURL("image/PNG",1.0);
-			doc.addImage(imgData, 'JPEG', 0, 0);
-			imgData = rosemmchart.toDataURL("image/PNG",1.0);
-			doc.addImage(imgData, 'JPEG', 105, 0);
-			imgData = 'data:image/png;base64,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'
-			doc.addImage(imgData, 'PNG', .2, 140,103,109);
-			imgData = somatochart.toDataURL("image/jpg",1.0);
-			doc.addImage(imgData, 'JPEG', 0, 135);
+			var img = new Image();
+			img.src= 'logos/logo.PNG';
+			doc.addImage(img, 'JPEG', 10, 0, 50, 30);
+			doc.setFont("courier");
+			doc.fromHTML($('.spname').html(),10,40);
+			doc.fromHTML($('.spedad').html(),10,45);
+			doc.fromHTML($('.spestatura').html(),160,40);
+			doc.fromHTML($('.ultimaconsulta').html(),160,45);
+			doc.autoTable({
+				theme: 'grid',
+				columnStyles: { 
+								0: { halign: 'center',fontStyle: 'bold'},
+								1: { halign: 'center' },
+								2: { halign: 'center',fontStyle: 'bold' },
+								3: { halign: 'center' },
+								 
+							}, // Cells in first column centered and green
+				tableWidth: 'wrap',
+				margin: { top: 55,left:55 },
+				tableLineColor: [0,0,0],
+				body: [
+						[
+							deportistaArray[0][0],deportistaArray[0][1],
+							deportistaArray[1][0],deportistaArray[1][1],
+						],
+						[
+							deportistaArray[2][0],deportistaArray[2][1],
+							deportistaArray[3][0],deportistaArray[3][1],
+						],
+						[
+							deportistaArray[4][0],deportistaArray[4][1],
+							deportistaArray[5][0],deportistaArray[5][1],
+						],
+						[
+							deportistaArray[6][0],deportistaArray[6][1],
+							deportistaArray[7][0],deportistaArray[7][1],
+						],
+						[
+							deportistaArray[8][0],deportistaArray[8][1],
+							deportistaArray[9][0],deportistaArray[9][1]
+						]
+					],styles: {font: "courier"},
+				didParseCell: function (data) {
+						var rows = data.table.body;
+						var columns = data.table.body.column;
+						
+							if (data.row.index  % 2 == 1) {
+							data.cell.styles.fillColor = [202,242,255];
+						}else{
+							data.cell.styles.fillColor= [255,255,255]
+						}
+						
+						
+					}
+				});
+			
+			doc.setFontSize(12);
+			img.src = 'logos/Barras.PNG';
+			doc.addImage(img, 'JPEG', 170, 185, 50, 100);
+			var splitTitle = doc.splitTextToSize($('#observaciones').val(), 200);
+			doc.text(10,100,splitTitle,{align:'justify',maxWidth: 200});
+			//doc.fromHTML($('#consulta ').html(),50,85);
+			doc.setFontSize(10);
+			doc.setTextColor(155,155,155);
+			doc.text(10, 245, `M. en C. Manuel Alejandro Vázquez Bautista
+Ced. Prof. 057902
+Tel: (662)5 010757 o (662)2 258708
+Héroes de Nacozari #72B, col. Modelo
+Hermosillo, Sonora, México. 
+Facebook.com/nutrackmexico `);
+			
+			if($('.selected').length > 1){
+				doc.addPage();
+				img.src= 'logos/logo.PNG';
+				doc.addImage(img, 'JPEG', 10, 0, 50, 30);
+				var imgData = pesochart.toDataURL("image/PNG", 1.0);   
+				doc.addImage(imgData, 'PNG', 10, 35);
+				imgData = sirichart.toDataURL("image/PNG",1.0);
+				doc.addImage(imgData, 'JPEG', 105, 35);
+				imgData = rosemmchart.toDataURL("image/PNG",1.0);
+				doc.addImage(imgData, 'JPEG', 10, 135);
+				doc.setFontSize(10);
+				doc.setTextColor(155,155,155);
+				doc.text(10, 245, `M. en C. Manuel Alejandro Vázquez Bautista
+Ced. Prof. 057902
+Tel: (662)5 010757 o (662)2 258708
+Héroes de Nacozari #72B, col. Modelo
+Hermosillo, Sonora, México. 
+Facebook.com/nutrackmexico `);
+				img.src = 'logos/Barras.PNG';
+				doc.addImage(img, 'JPEG', 170, 185, 50, 100);
+
+				doc.addPage();
+				img.src= 'logos/logo.PNG';
+				doc.addImage(img, 'JPEG', 10, 0, 50, 30);
+				img.src= 'logos/Mesocarta1.PNG';
+				doc.addImage(img, 'PNG', -5.2, 25.8,168,128.8);
+				imgData = somatochart.toDataURL("image/jpg",1.0);
+				doc.addImage(imgData, 'JPEG', 10, 34.8,127.5,99.2);
+				doc.setFontSize(14);
+				doc.setTextColor(155,155,155);
+				doc.text(65,48,'Mesomorfo');
+				doc.text(120,128,'Ectomorfo');
+				doc.text(10,128,'Endomorfo');
+				let valores = "El Valor de X: " + ejex;
+				doc.text(10,143, valores);
+				valores =  "El Valor de Y: " + ejey;
+				doc.text(10,153, valores);
+				doc.setFontSize(10);
+				doc.setTextColor(155,155,155);
+				doc.text(10, 245, `M. en C. Manuel Alejandro Vázquez Bautista
+Ced. Prof. 057902
+Tel: (662)5 010757 o (662)2 258708
+Héroes de Nacozari #72B, col. Modelo
+Hermosillo, Sonora, México. 
+Facebook.com/nutrackmexico `);
+				img.src = 'logos/Barras.PNG';
+				doc.addImage(img, 'JPEG', 170, 185, 50, 100);
+
+			}else{
+				doc.addPage();
+				img.src= 'logos/logo.PNG';
+				doc.addImage(img, 'JPEG', 10, 0, 50, 30);
+				//img.src= 'logos/MSC.PNG';
+				img.src= 'logos/Mesocarta1.PNG';
+				doc.addImage(img, 'PNG', -5.2, 25.8,168,128.8);
+				imgData = somatochart.toDataURL("image/jpg",1.0);
+				doc.addImage(imgData, 'JPEG', 10, 34.8,127.5,99.2);
+				doc.setFontSize(14);
+				doc.setTextColor(155,155,155);
+				doc.text(65,48,'Mesomorfo');
+				doc.text(120,128,'Ectomorfo');
+				doc.text(10,128,'Endomorfo');
+				let valores = "El Valor de X: " + ejex;
+				doc.text(10,143, valores);
+				valores =  "El Valor de Y: " + ejey;
+				doc.text(10,153, valores);
+				doc.setFontSize(10);
+				doc.setTextColor(155,155,155);
+				doc.text(10, 245, `M. en C. Manuel Alejandro Vázquez Bautista
+Ced. Prof. 057902
+Tel: (662)5 010757 o (662)2 258708
+Héroes de Nacozari #72B, col. Modelo
+Hermosillo, Sonora, México. 
+Facebook.com/nutrackmexico `);
+				img.src = 'logos/Barras.PNG';
+				doc.addImage(img, 'JPEG', 170, 185, 50, 100);
+
+			}
 			doc.save('paciente'+date+ '.pdf');
+			deportistaArray = [];
+			$('#observaciones').val('');
+			$('#pdf').css("pointer-events", "none");
+			$('#pdf').css("display", "none");
 		break;
 	}
 
-
-
-	/*
-	doc.fromHTML($('.datos-paciente').html(),15,15);
-	doc.fromHTML($('.consulta').html(),15,45);
-	var imgData = pesochart.toDataURL("image/PNG", 1.0);   
-	doc.addImage(imgData, 'PNG', 0, 135);
-	imgData = sirichart.toDataURL("image/PNG",1.0);
-	doc.addImage(imgData, 'JPEG', 105, 135);
-	doc.addPage();
-	imgData = brozekchart.toDataURL("image/PNG",1.0);
-    doc.addImage(imgData, 'JPEG', 0, 0);
-	imgData = rosemmchart.toDataURL("image/PNG",1.0);
-    doc.addImage(imgData, 'JPEG', 105, 0);
-	imgData = 'data:image/png;base64,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'
-    doc.addImage(imgData, 'PNG', .2, 140,103,109);
-	imgData = somatochart.toDataURL("image/jpg",1.0);
-    doc.addImage(imgData, 'JPEG', 0, 135);
-	doc.save('paciente'+date+ '.pdf');*/
 });
 
 });
@@ -1329,8 +1631,11 @@ Facebook.com/nutrackmexico `);
 
 function cleangraf(){
 	$('#graficas').css("display","none");
+	$('#graficas div').css("display","none");
+	$('#graficas div').removeClass('selected');
 	$('.datos-paciente').css("display","none");
-	$('.consulta').css("display","none");
+	$('#consulta').css("display","none");
+	$('#observaciones').val('');
 	$('#pesochart').remove(); // this is my <canvas> element
 	$('#pesochartdiv').append('<canvas id="pesochart" width="200px" height="200px"></canvas>');
 	$('#sirichart').remove(); // this is my <canvas> element
@@ -1339,4 +1644,10 @@ function cleangraf(){
 	$('#brozekchartdiv').append('<canvas id="brozekchart" width="200px" height="200px"></canvas>');
 	$('#rosemmchart').remove(); // this is my <canvas> element
 	$('#rosemmchartdiv').append('<canvas id="rosemmchart" width="200px" height="200px"></canvas>');
+	$('#Grasachart').remove(); // this is my <canvas> element
+	$('#Grasachartdiv').append('<canvas id="Grasachart" width="200px" height="200px"></canvas>');
+	$('#somatochart').remove(); // this is my <canvas> element
+	$('#somatotipo').append('<canvas id="somatochart" width="200px" height="200px"></canvas>');
+	$('#graficas div').removeClass("added");
+	$('#graficas div canvas').removeClass("visible")
 }

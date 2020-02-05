@@ -584,16 +584,23 @@ nav{
 }
 
 
+/*#graficas div:not(.added){
+  width: 0px !important;
+  height: 0px !important;
+}
+.visible{
+  height: 350px !important;
+}*/
+
 #consulta{
   flex-wrap: wrap;
   flex-direction: column;
-  width: 300px;
-  height: 170px;
+  width: 411px;
 }
 
-#consulta>*{
+/*#consulta>*{
   flex: 1 1 20%;
-}
+}*/
 
 .datos-paciente{
   width: 100%;

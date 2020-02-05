@@ -132,6 +132,33 @@
    
     }
 
+    function grafresultn($datos){
+        
+        $conn = mysqli_connect("localhost", "root", "", "pacientes") or die ("Error al conectar");
+        $sql = "SELECT c.FechaConsulta, c.Peso, c.PorGra FROM  consultanormal c WHERE c.IDP = $datos  ORDER by c.FechaConsulta ASC LIMIT 5 ";
+        
+        if (mysqli_query($conn, $sql)) {
+                    //$sql = "";
+                    $result = $conn->query($sql);
+                    if ($result->num_rows > 0) {
+                        // output data of each row
+                        while($row = $result->fetch_assoc()) {
+                            $new_array[] = $row;
+                            
+                        }
+                        //echo $new_array;
+                        print json_encode($new_array);
+                    } 
+        
+                       //echo "<script>alert('Usuario Guardado exitosamente');</script>";
+                    //header('location: index2.php');
+              
+        } else {
+              echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+        } 
+   
+    }
+
     function lastconsult($data){
         $conn = mysqli_connect("localhost", "root", "", "pacientes") or die ("Error al conectar");
         $sql = "SELECT r.*, c.* FROM resultadosdeportista r, consultadeportista c WHERE c.IDP = r.IDP and c.IDP = '$data' order by r.FechaConsulta DESC LIMIT 1";
@@ -216,6 +243,10 @@
 
     if (isset($_POST['callgraf'])) {
         echo grafresult($_POST['callgraf']);
+    }
+
+    if (isset($_POST['callgrafn'])) {
+        echo grafresultn($_POST['callgrafn']);
     }
 
     if (isset($_POST['calllastconsult'])) {
