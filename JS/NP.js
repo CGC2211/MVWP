@@ -373,9 +373,9 @@ $(document).on('click', '.consultas', function () {
 $(document).on('click', '.reporte', function () {
 
 	 $('#pdf').attr('data-tipo',$(this).attr('data-Tipo'));
-	 $('.spname').html("<label style='font-weight: bold;'>Nombre:</label> " + $(this).attr('data-name'));
-	 $('.spedad').html("<label style='font-weight: bold;'>Edad:</label> " + $(this).attr('data-Edad'));
-	 $('.spestatura').html("<label style='font-weight: bold;'>Estatura:</label> " + $(this).attr('data-talla'));
+	 $('.spname').html("<label style='font-weight: bold;' data-name='"+ $(this).attr('data-name')+"'>Nombre:</label> " + $(this).attr('data-name'));
+	 $('.spedad').html("<label style='font-weight: bold;'data-name='"+$(this).attr('data-Edad')+"'>Edad:</label> " + $(this).attr('data-Edad'));
+	 $('.spestatura').html("<label style='font-weight: bold;'data-name='"+$(this).attr('data-talla')+"'>Estatura:</label> " + $(this).attr('data-talla'));
 
 	resultados($(this).attr('data-id') ,$(this).attr('data-Tipo'),$(this).attr('data-Normal'),$(this).attr('data-Deportista'));
    $('#consulta').css('display', 'flex');
@@ -566,7 +566,7 @@ function resultados(id, tipo,normal,deportista){
 										`
 									);	
 							});
-							 $('.ultimaconsulta').html("<label style='font-weight: bold;'>Fecha:</label> " + data[0].FechaConsulta);
+							 $('.ultimaconsulta').html("<label style='font-weight: bold;'data-name='"+data[0].FechaConsulta+"'>Fecha:</label> " + data[0].FechaConsulta);
 							
 								
 						},error: function(err){
@@ -623,7 +623,8 @@ function resultados(id, tipo,normal,deportista){
 										`
 									);	
 							});
-							 $('.ultimaconsulta').html("<label style='font-weight: bold;'>Fecha:</label> " + data[0].FechaConsulta);
+							$('.ultimaconsulta').html("<label style='font-weight: bold;'data-name='"+data[0].FechaConsulta+"'>Fecha:</label> " + data[0].FechaConsulta)
+							 //$('.ultimaconsulta').html("<label style='font-weight: bold;'>Fecha:</label> " + data[0].FechaConsulta);
 							
 							deportistaArray.push(['Peso (Kg):',parseFloat(data[0].Peso).toFixed(4)]);
 							deportistaArray.push(['Siri (%)',parseFloat(data[0].sirig).toFixed(4)]);
@@ -1392,11 +1393,20 @@ function (){
 			var img = new Image();
 			img.src= 'logos/logo.PNG';
 			doc.addImage(img, 'JPEG', 10, 0, 50, 30);
-			doc.setFont("courier");
-			doc.fromHTML($('.spname').html(),10,40);
-			doc.fromHTML($('.spedad').html(),10,45);
-			doc.fromHTML($('.spestatura').html(),160,40);
-			doc.fromHTML($('.ultimaconsulta').html(),160,45);
+			doc.setFont("helvetica");
+			doc.setFontSize(12);
+			doc.setFontType('bold');
+			doc.text(10,40,"Nombre: ");
+			doc.text(10,45,"Edad: ");
+			doc.text("Estatura: ",160,40);
+			doc.text("Fecha: ",160,45);
+			doc.setFont("helvetica");
+			doc.setFontSize(12);
+			doc.setFontType('normal');
+			doc.text(29,40,$('.spname label').attr('data-name'));
+			doc.text(23,45,$('.spedad label').attr('data-name'));
+			doc.text($('.spestatura label').attr('data-name'),180,40);
+			doc.text($('.ultimaconsulta label').attr('data-name'),175,45);
 			doc.autoTable({
 				theme: 'grid',
 				columnStyles: { 
@@ -1414,7 +1424,7 @@ function (){
 					[$("#consulta div.row:nth-child(4) div.column:nth-child(1)").text(), $("#consulta div.row:nth-child(4) div.column:nth-child(2)").text()],
 					[$("#consulta div.row:nth-child(5) div.column:nth-child(1)").text(), $("#consulta div.row:nth-child(5) div.column:nth-child(2)").text()],
 					[$("#consulta div.row:nth-child(6) div.column:nth-child(1)").text(), $("#consulta div.row:nth-child(6) div.column:nth-child(2)").text()]
-				],styles: {font: "courier"},
+				],styles: {font: "helvetica"},
 				didParseCell: function (data) {
 						var rows = data.table.body;
 						
@@ -1428,10 +1438,11 @@ function (){
 					}
 				});
 			doc.setFontSize(12);
+			doc.setFont("helvetica");
 			img.src = 'logos/Barras.PNG';
 			doc.addImage(img, 'JPEG', 170, 185, 50, 100);
 			var splitTitle = doc.splitTextToSize($('#observaciones').val(), 180);
-			doc.text(10,100,splitTitle,{align:'left',width:100});
+			doc.text(10,110,splitTitle,{align:'left',width:100});
 			//doc.fromHTML($('#consulta ').html(),50,85);
 			doc.setFontSize(10);
 			doc.setTextColor(155,155,155);
@@ -1463,16 +1474,28 @@ Facebook.com/nutrackmexico `);
 			}
 
 			doc.save('paciente'+date+ '.pdf');
+			$('#observaciones').val('');
+			$('#pdf').css("pointer-events", "none");
+			$('#pdf').css("display", "none");
 		break;
 		case 'Deportista':
 			var img = new Image();
 			img.src= 'logos/logo.PNG';
 			doc.addImage(img, 'JPEG', 10, 0, 50, 30);
-			doc.setFont("courier");
-			doc.fromHTML($('.spname').html(),10,40);
-			doc.fromHTML($('.spedad').html(),10,45);
-			doc.fromHTML($('.spestatura').html(),160,40);
-			doc.fromHTML($('.ultimaconsulta').html(),160,45);
+			doc.setFont("helvetica");
+			doc.setFontType('bold');
+			doc.setFontSize(12);
+			doc.text(10,40,"Nombre: ");
+			doc.text(10,45,"Edad: ");
+			doc.text("Estatura: ",160,40);
+			doc.text("Fecha: ",160,45);
+			doc.setFontType('normal');
+			doc.setFont("helvetica");
+			doc.setFontSize(12);
+			doc.text(29,40,$('.spname label').attr('data-name'));
+			doc.text(23,45,$('.spedad label').attr('data-name'));
+			doc.text($('.spestatura label').attr('data-name'),180,40);
+			doc.text($('.ultimaconsulta label').attr('data-name'),175,45);
 			doc.autoTable({
 				theme: 'grid',
 				columnStyles: { 
@@ -1506,7 +1529,7 @@ Facebook.com/nutrackmexico `);
 							deportistaArray[8][0],deportistaArray[8][1],
 							deportistaArray[9][0],deportistaArray[9][1]
 						]
-					],styles: {font: "courier"},
+					],styles: {font: "helvetica"},
 				didParseCell: function (data) {
 						var rows = data.table.body;
 						var columns = data.table.body.column;
@@ -1522,6 +1545,7 @@ Facebook.com/nutrackmexico `);
 				});
 			
 			doc.setFontSize(12);
+			doc.setFont("helvetica");
 			img.src = 'logos/Barras.PNG';
 			doc.addImage(img, 'JPEG', 170, 185, 50, 100);
 			var splitTitle = doc.splitTextToSize($('#observaciones').val(), 200);

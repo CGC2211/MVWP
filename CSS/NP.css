@@ -583,6 +583,9 @@ nav{
   height: 300px;
 }
 
+.spname .spedad .spestatura .ultimaconsulta{
+  font-family: sans-serif;
+}
 
 /*#graficas div:not(.added){
   width: 0px !important;
