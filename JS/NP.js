@@ -3,7 +3,7 @@ let modal = document.getElementById('myModal');
 let modals = document.getElementById('ModalSeguimiento');
 const hamburger = document.querySelector('.hamburger');
 const navlinks = document.querySelector('.nav-links');
-const links = document.querySelectorAll('.nav-links li');
+const links = document.querySelectorAll('.item');
 var myPieChart;
 let deportistaArray = [];
 let ejex = 0;
@@ -20,9 +20,13 @@ hamburger.addEventListener('click', () =>{
 
 function hidemenu(){
 	navlinks.classList.toggle("open");
+	hamburger.classList.toggle("hide");
 	links.forEach(link =>{
 		link.classList.toggle("fade");
-	})
+	});
+	//$('.logo').removeClass('fade');
+
+
 }
 
 $("#tipodepaciente").change(function(){
@@ -310,7 +314,7 @@ $(".optional").click(function(){
 			$(".newpa").css("display","none");
 			$(".Seguimiento").css("display","flex");
 			$( "#navigation" ).css('transition','background-color 0.5s linear');
-			$( "#navigation" ).css('background-color','#2D4996');
+			$( "#navigation" ).css('background-color','rgba(45, 73, 150,0.90)');
 		default:
 			break;
 		state = !state;
